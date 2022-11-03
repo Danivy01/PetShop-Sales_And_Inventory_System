@@ -59,6 +59,16 @@ input {
 }
 
 .login_btn{
+  background-color: rgb(57, 120, 255);
+  color: white;
+  border-color: rgb(57, 120, 255);
+  border-style: solid;
+  height: 36px;
+  width: 80px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 60px;
   cursor: pointer;
-  border-color: black;
+  margin-left: 8px;
+  transition: box-shadow 0.15s;
 }
