@@ -10,7 +10,7 @@
                     <!-- Nested Row within Card Body -->
                     <div class="row shadow">
                         <div class="col-lg-6 d-none d-lg-block">
-                        <img src="https://i.pinimg.com/originals/91/05/5f/91055ff9f9bdc19277b31188c8b782ad.gif" alt="" width="480" height="470"></div>
+                        <img src="https://i.pinimg.com/originals/91/05/5f/91055ff9f9bdc19277b31188c8b782ad.gif" alt="" width="460" height="470"></div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
