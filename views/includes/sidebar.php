@@ -37,7 +37,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Pet Shop Management System</div>
+        <div class="sidebar-brand-text mx-1">Pet Shop Sales and Inventory System</div>
       </a>
 
       <!-- Divider -->
@@ -47,7 +47,7 @@
       <li class="nav-item">
         <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-home"></i>
-          <span>Home</span></a>
+          <span>Dashboard</span></a>
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -70,25 +70,25 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=3">
+        <a class="nav-link" href="?page=4">
           <i class="fas fa-fw fa-table"></i>
           <span>Product</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=4">
+        <a class="nav-link" href="?page=3">
           <i class="fas fa-fw fa-archive"></i>
           <span>Inventory</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=5">
+        <a class="nav-link" href="?page=6">
           <i class="fas fa-fw fa-retweet"></i>
           <span>Transaction</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=6">
+        <a class="nav-link" href="?page=5">
           <i class="fas fa-fw fa-cogs"></i>
           <span>Supplier</span></a>
       </li>

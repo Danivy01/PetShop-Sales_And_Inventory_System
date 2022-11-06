@@ -6,7 +6,7 @@
 
 <title>Pet Shop</title>
 
-<link rel="icon" href="https://www.freeiconspng.com/uploads/sales-icon-7.png">
+<link rel="icon" href="https://www.pngkey.com/png/detail/14-147705_how-to-set-use-blue-paw-print-svg.png">
 
 <!-- Custom fonts for this template-->
 <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

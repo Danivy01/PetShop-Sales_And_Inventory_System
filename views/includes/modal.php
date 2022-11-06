@@ -34,7 +34,7 @@ window.onload = function() {
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body"><?php echo  $firstName; ?> are you sure do you want to logout?</div>
+        <div class="modal-body"><?php echo  $firstName; ?>, are you sure do you want to logout?</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-primary" href="controllers/logoutController.php">Logout</a>
