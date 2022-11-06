@@ -6,9 +6,27 @@
 </head>
 
 <body class="bg-gradient-primary">
+    <?php session_destroy(); ?>
+    <?php print_r($_SESSION); ?>
 
     <?php if (isset($_SESSION['randomId'])) : ?>
-        <?php include('views/dashboard/dashboard.php'); ?>
+        <?php if (!isset($_GET['page'])) : ?>
+            <?php include('views/dashboard/dashboard.php'); ?>
+        <?php elseif ($_GET['page'] == 1) : ?>
+            <?php include('views/pages/customer.php'); ?>
+        <?php elseif ($_GET['page'] == 2) : ?>
+            <?php include('views/pages/employee.php'); ?>
+        <?php elseif ($_GET['page'] == 3) : ?>
+            <?php include('views/pages/inventory.php'); ?>
+        <?php elseif ($_GET['page'] == 4) : ?>
+            <?php include('views/pages/product.php'); ?>
+        <?php elseif ($_GET['page'] == 5) : ?>
+            <?php include('views/pages/supplier.php'); ?>
+        <?php elseif ($_GET['page'] == 6) : ?>
+            <?php include('views/pages/transaction.php'); ?>
+        <?php elseif ($_GET['page'] == 7) : ?>
+            <?php include('views/pages/user.php'); ?>
+        <?php endif; ?>
     <?php else : ?>
         <?php include('views/login/login.php'); ?>
     <?php endif; ?>

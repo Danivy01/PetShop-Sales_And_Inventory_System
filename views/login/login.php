@@ -15,17 +15,17 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome to Pet Shop Management System!</h1>
                                 </div>
-                                <form class="user" role="form" method="POST">
+                                <form class="user" role="form" method="POST" id="loginForm">
                                     <div class="form-group">
                                         <input class="form-control form-control-user" placeholder="Username" id="user" type="text" autofocus>
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-control form-control-user" placeholder="Password" id="password" type="password" value="">
+                                        <input class="form-control form-control-user" placeholder="Password" id="password" type="password">
                                     </div>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
                                             <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                            <label class="custom-control-label" for="customCheck">Show Password</label>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-user btn-block" type="submit">Login</button>
