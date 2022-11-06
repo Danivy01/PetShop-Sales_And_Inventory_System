@@ -5,26 +5,22 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-hover table-striped table-bordered" id="adminTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Type</th>
-                        <th>Action</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
+                    <?php echo $adminTable; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-
-
-
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -32,17 +28,17 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-hover table-striped table-bordered" id="usersTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Type</th>
-                        <th>Action</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                
+                    <?php echo $userTable; ?>
                 </tbody>
             </table>
         </div>

@@ -69,13 +69,50 @@ class Database
     return $user;
   }
 
-  protected function employeeDetails($userId) // Query to get the employee details
+  protected function employeeDetails($userId = "", $type = 0) // Query to get the employee details
   {
     $data = [];
 
-    $sql = "SELECT * FROM employeedetails WHERE id = :userId";
+    if ($type == 0)
+    {
+      $sql = "SELECT * FROM employeedetails WHERE id = :userId";
+      $stmt = $this->connect()->prepare($sql);
+      $stmt->execute(['userId' => $userId]);
+    }
+    else if ($type = 1)
+    {
+      $sql = "SELECT 
+              e.firstName, 
+              e.middleName, 
+              e.lastName,
+              e.gender,
+              e.emailAddress,
+              e.phoneNumber,
+              e.hiredDate,
+              e.location,
+              p.positionName
+              FROM employeedetails e
+              LEFT JOIN position p ON p.id = e.positionId";
+
+      $stmt = $this->connect()->prepare($sql);
+      $stmt->execute();
+    }
+    
+    while ($row = $stmt->fetch()) 
+    {
+      $data[] = $row;
+    }
+
+    return $data;
+  }
+
+  protected function userTable() // Query to get the user's table
+  {
+    $data = [];
+
+    $sql = "SELECT * FROM users";
     $stmt = $this->connect()->prepare($sql);
-    $stmt->execute(['userId' => $userId]);
+    $stmt->execute();
 
     while ($row = $stmt->fetch()) 
     {
@@ -85,13 +122,36 @@ class Database
     return $data;
   }
 
-  protected function position($id) // Query to get the user's position
+  protected function position($posId, $type) // Query to get the user's position
   {
-    $sql = "SELECT positionName FROM position WHERE id = :id";
-    $stmt = $this->connect()->prepare($sql);
-    $stmt->execute(['id' => $id]);
+    $data = [];
 
-    return $stmt->fetch()['positionName'];
+    $sql = "SELECT * FROM position";
+
+    if ($type == 0)
+    {
+      $sql .= " WHERE id = :posId";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0)
+    {
+      $stmt->execute(['posId' => $posId]);
+
+      return $stmt->fetch()['positionName'];
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute();
+
+      while ($row = $stmt->fetch()) 
+      {
+        $data[] = $row;
+      }
+
+      return $data;
+    }
   }
 
   protected function accessFields($typeId) // Query to get the user's access fields

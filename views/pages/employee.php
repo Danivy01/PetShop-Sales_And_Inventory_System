@@ -5,17 +5,18 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-hover table-striped table-bordered" id="employeeTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th class="text-center">First Name</th>
+                        <th class="text-center">Middle Name</th>
+                        <th class="text-center">Last Name</th>
+                        <th class="text-center">Position</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                
+                    <?php echo $employeeTable; ?>
                 </tbody>
             </table>
         </div>

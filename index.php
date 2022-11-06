@@ -14,8 +14,6 @@
 
         <?php include('views/includes/sidebar.php'); ?>
 
-        <?php include('views/includes/modal.php'); ?>
-
         <?php if (!isset($_GET['page'])) : ?>
 
             <?php include('views/dashboard/dashboard.php'); ?>
@@ -70,6 +68,8 @@
             </div>
 
             <?php include('views/includes/footer.php'); ?>
+
+            <?php include('views/includes/modal.php'); ?>
 
         </footer>
 
