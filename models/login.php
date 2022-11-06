@@ -1,5 +1,4 @@
 <?php
-
 class Login extends Database
 {
     public function authorizeUser($data)
@@ -18,11 +17,11 @@ class Login extends Database
 
         if (count($userData) > 0)
         {
-            return "success" . $userData[0]['randomId'];
+            return $userData;
         }
         else
         {
-            return "2";
+            return "3";
         }
     }
 }

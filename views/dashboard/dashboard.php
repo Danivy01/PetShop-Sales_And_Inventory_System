@@ -1,4 +1,3 @@
-<?php include('views/includes/sidebar.php'); ?>
 <div class="row show-grid">
     <!-- Customer ROW -->
     <div class="col-md-3">
@@ -133,7 +132,7 @@
 
                                     </div>
                                     <!-- /.list-group -->
-                                    <a href="product.php" class="btn btn-default btn-block">View All Products</a>
+                                    <a href="views/pages/product.php?page=3" class="btn btn-default btn-block">View All Products</a>
                                 </div>
                                 <!-- /.panel-body -->
                             </div>

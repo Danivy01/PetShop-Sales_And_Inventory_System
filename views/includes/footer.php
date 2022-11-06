@@ -82,6 +82,12 @@
                         }).then(function() {
                             window.location = "index.php";
                         })
+                    } else if (data == 3){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Account does not exist!',
+                        })
                     }
                 }
             })

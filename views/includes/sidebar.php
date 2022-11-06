@@ -58,43 +58,43 @@
       </div>
       <!-- Tables Buttons -->
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/customer.php?page=1">
+        <a class="nav-link" href="?page=1">
           <i class="fas fa-fw fa-user"></i>
           <span>Customer</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/employee.php?page=2">
+        <a class="nav-link" href="?page=2">
           <i class="fas fa-fw fa-user"></i>
           <span>Employee</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/product.php?page=3">
+        <a class="nav-link" href="?page=3">
           <i class="fas fa-fw fa-table"></i>
           <span>Product</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/inventory.php?page=4">
+        <a class="nav-link" href="?page=4">
           <i class="fas fa-fw fa-archive"></i>
           <span>Inventory</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/transaction.php?page=5">
+        <a class="nav-link" href="?page=5">
           <i class="fas fa-fw fa-retweet"></i>
           <span>Transaction</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/supplier.php?page=6">
+        <a class="nav-link" href="?page=6">
           <i class="fas fa-fw fa-cogs"></i>
           <span>Supplier</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="views/pages/user.php?page=7">
+        <a class="nav-link" href="?page=7">
           <i class="fas fa-fw fa-users"></i>
           <span>Accounts</span></a>
       </li>

@@ -36,7 +36,7 @@ class Database
   {
     // Type = 0 -> Used to Login the User
     // Type = 1 -> Get User Data
-    
+
     $user = [];
 
     $sql = "SELECT * FROM users";
@@ -67,5 +67,39 @@ class Database
     }
 
     return $user;
+  }
+
+  protected function employeeDetails($userId) // Query to get the employee details
+  {
+    $data = [];
+
+    $sql = "SELECT * FROM employeedetails WHERE id = :userId";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute(['userId' => $userId]);
+
+    while ($row = $stmt->fetch()) 
+    {
+      $data[] = $row;
+    }
+
+    return $data;
+  }
+
+  protected function position($id) // Query to get the user's position
+  {
+    $sql = "SELECT positionName FROM position WHERE id = :id";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute(['id' => $id]);
+
+    return $stmt->fetch()['positionName'];
+  }
+
+  protected function accessFields($typeId) // Query to get the user's access fields
+  {
+    $sql = "SELECT type, accessType FROM type WHERE id = :typeId";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute(['typeId' => $typeId]);
+
+    return $stmt->fetchAll();
   }
 }

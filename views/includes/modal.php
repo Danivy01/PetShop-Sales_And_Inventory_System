@@ -1,16 +1,3 @@
-<!-- Employee select and script -->
-<?php
-$sqlforjob = "SELECT DISTINCT JOB_TITLE, JOB_ID FROM job order by JOB_ID asc";
-$result = mysqli_query($db, $sqlforjob) or die ("Bad SQL: $sqlforjob");
-
-$job = "<select class='form-control' name='jobs' required>
-        <option value='' disabled selected hidden>Select Job</option>";
-  while ($row = mysqli_fetch_assoc($result)) {
-    $job .= "<option value='".$row['JOB_ID']."'>".$row['JOB_TITLE']."</option>";
-  }
-
-$job .= "</select>";
-?>
 <script>  
 window.onload = function() {  
   // ---------------
@@ -47,10 +34,10 @@ window.onload = function() {
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body"><?php echo  $_SESSION['FIRST_NAME']; ?> are you sure do you want to logout?</div>
+        <div class="modal-body"><?php echo  $firstName; ?> are you sure do you want to logout?</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="logout.php">Logout</a>
+          <a class="btn btn-primary" href="controllers/logoutController.php">Logout</a>
         </div>
       </div>
     </div>

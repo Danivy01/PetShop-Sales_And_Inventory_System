@@ -16,10 +16,11 @@ if (isset($_POST['login']))
 
     $id = $login->authorizeUser($data);
 
-    if (strpos($id, 'success') !== false)
+    if (is_array($id))
     {
-        $id = str_replace('success', '', $id);
-        $_SESSION['randomId'] = $id;
+        $_SESSION['randomId'] = $id[0]['randomId'];
+        $_SESSION['userId'] = $id[0]['userId'];
+        $_SESSION['typeId'] = $id[0]['typeId'];
         echo 2;
     }
     else
