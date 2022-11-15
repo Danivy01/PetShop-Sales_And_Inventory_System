@@ -35,9 +35,10 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
         <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+        <i class="fas fa-paw"></i>
         </div>
-        <div class="sidebar-brand-text mx-1">Pet Shop Sales and Inventory System</div>
+        <div class="sidebar-brand-text mx-1">Pet Shop Sales and Inventory System
+        </div>
       </a>
 
       <!-- Divider -->
@@ -65,7 +66,7 @@
 
       <li class="nav-item">
         <a class="nav-link" href="?page=2">
-          <i class="fas fa-fw fa-user"></i>
+          <i class="fas fa-fw fa-user-tie"></i>
           <span>Employee</span></a>
       </li>
 

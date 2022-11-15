@@ -14,7 +14,7 @@
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h1 text-gray-900 mb-4">Welcome!</h1>
+                                    <h1 class="h1 text-gray-900 mb-4 fs-Italiana">Welcome!</h1>
                                     <h5 class="h5 text-gray-900 mb-4">Pet Shop Sales and Inventory System</h5>
                                 </div>
                                 <form class="user" role="form" method="POST" id="loginForm">
