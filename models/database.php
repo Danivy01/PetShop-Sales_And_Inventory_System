@@ -102,4 +102,18 @@ class Database
 
     return $stmt->fetchAll();
   }
+
+  public function addedCustomers($fn, $ln, $pn) 
+  {
+    $sql = "INSERT INTO customer (first_name, last_name, phone_num) VALUES ($fn, $ln, $pn)";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute(['first_name' => $fn, 'last_name' => $ln, 'phone_num' => $pn]);
+
+    $status = "You added Customer Successfully";
+    $fn = "";
+    $ln = "";
+    $pn = "";
+
+
+  }
 }
