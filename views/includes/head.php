@@ -16,3 +16,7 @@
 <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
 
 <?php session_start(); ?>
+
+<?php if (!isset($_SESSION)) header('Location: index.php'); ?>
+
+<?php include('views/includes/modal.php'); ?>

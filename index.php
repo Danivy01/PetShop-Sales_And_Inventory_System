@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <?php include('views/includes/head.php'); ?>
-</head>
+   <?php include('views/includes/head.php'); ?>
+</head> 
 
 <body class="bg-gradient-primary">
     <?php print_r($_SESSION); ?>
@@ -68,8 +68,6 @@
             </div>
 
             <?php include('views/includes/footer.php'); ?>
-
-            <?php include('views/includes/modal.php'); ?>
 
         </footer>
 

@@ -103,4 +103,54 @@ class Details extends Database
 
         return array('admin' => $adminTable, 'users' => $userTable);
     }
+
+    public function insertCustomer($data)
+    {
+        return $this->customerDetails(1, $data);
+    }
+
+    public function customerTable()
+    {
+        $customerTable = "";
+
+        $customer = $this->customerDetails();
+
+        if (count($customer) > 0)
+        {
+            foreach ($customer AS $cust)
+            {
+                $customerTable .= "<tr>";
+                $customerTable .= "<td class='text-center'>" . $cust['firstName'] . "</td>";
+                $customerTable .= "<td class='text-center'>" . $cust['lastName'] . "</td>";
+                $customerTable .= "<td class='text-center'>" . $cust['phoneNumber'] . "</td>";
+                $customerTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#editCustomerModal' data-id='" . $cust['id'] . "' type='button' class='btn btn-primary bg-gradient-primary editCust' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+                $customerTable .= "</tr>";
+            }
+        }
+        else
+        {
+            $customerTable .= "<tr>";
+            $customerTable .= "<td colspan='4' class='text-center'>No records found.</td>";
+            $customerTable .= "</tr>";
+        }
+
+        return $customerTable;
+    }
+
+    public function customerModal($id)
+    {
+        $customerDetails = $this->customerDetails(0, array('id' => $id));
+
+        return json_encode([
+            'firstName' => $customerDetails[0]['firstName'],
+            'lastName' => $customerDetails[0]['lastName'],
+            'phoneNumber' => $customerDetails[0]['phoneNumber'],
+            'id' => $customerDetails[0]['id']
+        ]);
+    }
+
+    public function updateCustomer($data)
+    {
+        return $this->customerDetails(2, $data);
+    }
 }

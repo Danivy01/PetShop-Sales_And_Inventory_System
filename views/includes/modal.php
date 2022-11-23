@@ -1,29 +1,3 @@
-<script>
-  window.onload = function() {
-    // ---------------
-    // basic usage
-    // ---------------
-    var $ = new City();
-    $.showProvinces("#province");
-    $.showCities("#city");
-
-    // ------------------
-    // additional methods 
-    // -------------------
-
-    // will return all provinces 
-    console.log($.getProvinces());
-
-    // will return all cities 
-    console.log($.getAllCities());
-
-    // will return all cities under specific province (e.g Batangas)
-    console.log($.getCities("Batangas"));
-
-  }
-</script>
-<!-- end of Employee select and script -->
-
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -42,6 +16,7 @@
     </div>
   </div>
 </div>
+
 <!-- Customer Modal-->
 <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -53,15 +28,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <form role="form" method="post" action="cust_transac.php?action=add">
+        <form method="post" id="addCustomer">
           <div class="form-group">
-            <input class="form-control" placeholder="First Name" name="firstname" required>
+            <input class="form-control" placeholder="First Name" id="firstname">
           </div>
           <div class="form-group">
-            <input class="form-control" placeholder="Last Name" name="lastname" required>
+            <input class="form-control" placeholder="Last Name" id="lastname">
           </div>
           <div class="form-group">
-            <input class="form-control" placeholder="Phone Number" name="phonenumber" required>
+            <input class="form-control" placeholder="Phone Number" id="phonenumber">
           </div>
           <hr>
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
@@ -72,8 +47,9 @@
     </div>
   </div>
 </div>
-<!-- Customer Modal-->
-<div class="modal fade" id="poscustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- Edit Customer Modal-->
+<div class="modal fade" id="editCustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -83,16 +59,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <form role="form" method="post" action="cust_pos_trans.php?action=add">
+        <form method="post" id="editCustomer">
           <div class="form-group">
-            <input class="form-control" placeholder="First Name" name="firstname" required>
+            <input class="form-control" placeholder="First Name" id="editFirstName">
           </div>
           <div class="form-group">
-            <input class="form-control" placeholder="Last Name" name="lastname" required>
+            <input class="form-control" placeholder="Last Name" id="editLastName">
           </div>
           <div class="form-group">
-            <input class="form-control" placeholder="Phone Number" name="phonenumber" required>
+            <input class="form-control" placeholder="Phone Number" id="editPhoneNumber">
           </div>
+          <input type="hidden" id="editId">
           <hr>
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
@@ -102,6 +79,7 @@
     </div>
   </div>
 </div>
+
 <!-- Employee Modal-->
 <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -198,10 +176,3 @@
     </div>
   </div>
 </div>
-<script>
-  $('#confirm-delete').on('show.bs.modal', function(e) {
-    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-    $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-  });
-</script>

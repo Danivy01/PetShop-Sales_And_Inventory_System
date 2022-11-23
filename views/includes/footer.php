@@ -69,6 +69,161 @@
             });
         });
 
+        // Add Customer Logic
+
+        $("#addCustomer").on("submit", function(e) {
+            e.preventDefault();
+
+            let firstname = $("#firstname").val();
+            let lastname = $("#lastname").val();
+            let phonenumber = $("#phonenumber").val();
+            let pattern = /^(09|\+639)\d{9}$/;
+
+            if (firstname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'First Name cannot be blank!',
+                })
+            } else if (lastname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Last Name cannot be blank!',
+                })
+            } else if (phonenumber.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Phone Number cannot be blank!',
+                })
+            } else if (!pattern.test(phonenumber)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        firstname: firstname,
+                        lastname: lastname,
+                        phonenumber: phonenumber,
+                        addCustomer: true
+                    },
+                    success: function(data) {
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Customer Added Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        // Edit Customer
+
+        $(document).on("click", ".editCust", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    editCustomerValue: true
+                },
+                success: function(data) {
+                    let response = JSON.parse(data);
+
+                    console.log(response);
+
+                    $("#editFirstName").val(response.firstName);
+                    $("#editLastName").val(response.lastName);
+                    $("#editPhoneNumber").val(response.phoneNumber);
+                    $("#editId").val(response.id);
+                }
+            })
+        })
+
+        $("#editCustomer").on("submit", function(e){
+            e.preventDefault();
+
+            let firstname = $("#editFirstName").val();
+            let lastname = $("#editLastName").val();
+            let phonenumber = $("#editPhoneNumber").val();
+            let id = $("#editId").val();
+            let pattern = /^(09|\+639)\d{9}$/;
+
+            if (firstname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'First Name cannot be blank!',
+                })
+            } else if (lastname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Last Name cannot be blank!',
+                })
+            } else if (phonenumber.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Phone Number cannot be blank!',
+                })
+            } else if (!pattern.test(phonenumber)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        firstname: firstname,
+                        lastname: lastname,
+                        phonenumber: phonenumber,
+                        id: id,
+                        editCustomer: true
+                    },
+                    success: function(data) {
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Customer Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
     <?php else : ?>
 
         $("#loginForm").on("submit", function(e) {
@@ -152,4 +307,34 @@
         })
 
     <?php endif; ?>
+
+
+    window.onload = function() {
+        // ---------------
+        // basic usage
+        // ---------------
+        var $ = new City();
+        $.showProvinces("#province");
+        $.showCities("#city");
+
+        // ------------------
+        // additional methods 
+        // -------------------
+
+        // will return all provinces 
+        console.log($.getProvinces());
+
+        // will return all cities 
+        console.log($.getAllCities());
+
+        // will return all cities under specific province (e.g Batangas)
+        console.log($.getCities("Batangas"));
+
+    }
+
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+        $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+    });
 </script>

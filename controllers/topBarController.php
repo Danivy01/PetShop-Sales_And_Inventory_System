@@ -33,12 +33,19 @@ if (isset($_SESSION['userId']))
 
     if (isset($_GET['page'])) 
     {
+        // Customer Table
+        if ($_GET['page'] == 1)
+        {
+            $customerTable = $details->customerTable();
+        }
+
         // Employee Table
         if ($_GET['page'] == 2)
         {
             $employeeTable = $details->employeeTable();
         }
         
+        // Accounts Table
         if ($_GET['page'] == 7)
         {
             $adminTable = $details->accountsTable()['admin'];

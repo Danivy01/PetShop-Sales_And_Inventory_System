@@ -6,9 +6,10 @@ class Database
   private $pwd = "";
   private $dbName = "pet_shop";
 
-  protected function connect() // MySQL Connection
+
+  public function connect()
   {
-    $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;
+    $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->dbName;
     $pdo = new PDO($dsn, $this->user, $this->pwd);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
@@ -161,5 +162,68 @@ class Database
     $stmt->execute(['typeId' => $typeId]);
 
     return $stmt->fetchAll();
+  }
+
+  protected function customerDetails($type = 0, $data = []) // Query for Customer Table
+  {
+    if ($type == 0)
+    {
+      $sql = "SELECT * FROM customer";
+
+      if (count($data) > 0)
+      {
+        $sql .= " WHERE id = :id";
+      }
+    }
+    else if ($type == 1)
+    {
+      $sql = "INSERT INTO customer (firstName, lastName, phoneNumber) VALUES (:firstName, :lastName, :phoneNumber)";
+    }
+    else if ($type == 2)
+    {
+      $sql = "UPDATE customer SET firstName = :firstName, lastName = :lastName, phoneNumber = :phoneNumber WHERE id = :id";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0)
+    {
+      if (count($data) > 0)
+      {
+        $stmt->execute(['id' => $data['id']]);
+      }
+      else
+      {
+        $stmt->execute();
+      }
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute(['firstName' => $data['firstName'], 'lastName' => $data['lastName'], 'phoneNumber' => $data['phoneNumber']]);
+    }
+    else if ($type == 2)
+    {
+      $stmt->execute(['firstName' => $data['firstName'], 'lastName' => $data['lastName'], 'phoneNumber' => $data['phoneNumber'], 'id' => $data['id']]);
+    }
+
+    if ($type == 0)
+    {
+      $data = [];
+
+      while ($row = $stmt->fetch()) 
+      {
+        $data[] = $row;
+      }
+
+      return $data;
+    }
+    else if ($type == 1)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 2)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
   }
 }

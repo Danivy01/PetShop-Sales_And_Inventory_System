@@ -5,17 +5,17 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-responsive table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-striped table-hover table-bordered" id="customerTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>Action</th>
+                        <th class="text-center">First Name</th>
+                        <th class="text-center">Last Name</th>
+                        <th class="text-center">Phone Number</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <?php echo $customerTable; ?>
                 </tbody>
             </table>
         </div>
