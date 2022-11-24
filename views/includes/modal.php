@@ -53,7 +53,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Customer</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -95,35 +95,112 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <input class="form-control" placeholder="First Name" id="firstname">
+                <input class="form-control" placeholder="First Name" id="cusFirstName">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Middle Name" id="middleName">
+                <input class="form-control" placeholder="Middle Name" id="cusMiddleName">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Last Name" id="lastname">
+                <input class="form-control" placeholder="Last Name" id="cusLastname">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <select class='form-control' id='gender'>
+                <select class='form-control' id='cusGender'>
                   <option value="" disabled selected hidden>Select Gender</option>
                   <option value="0">Male</option>
                   <option value="1">Female</option>
                 </select>
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Email" id="email">
+                <input class="form-control" placeholder="Email" id="cusEmail">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Phone Number" id="phonenumber">
+                <input class="form-control" placeholder="Phone Number" id="cusPhoneNumber">
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <select id="position" class="form-control">
+                <select id="cusPosition" class="form-control">
+                  <option value="" disabled selected hidden>Select Position</option>
+                  <?php foreach ($position as $key => $pos) : ?>
+                    <?php echo $pos; ?>
+                    <option value="<?php echo $pos['id']; ?>"><?php echo $pos['positionName']; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input placeholder="Date Hired" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="hireddate" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea id="address" cols="30" rows="5" class="form-control" placeholder="House/Unit/Flr #, Bldg Name, Blk or Lot #"></textarea>
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="province" placeholder="Province" name="province"></select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="city" placeholder="City" name="city"></select>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Employee Modal-->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" method="post" id="editEmployeeForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" placeholder="First Name" id="cusFirstName">
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="Middle Name" id="cusMiddleName">
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="Last Name" id="cusLastname">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <select class='form-control' id='cusGender'>
+                  <option value="" disabled selected hidden>Select Gender</option>
+                  <option value="0">Male</option>
+                  <option value="1">Female</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="Email" id="cusEmail">
+              </div>
+              <div class="form-group">
+                <input class="form-control" placeholder="Phone Number" id="cusPhoneNumber">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <select id="cusPosition" class="form-control">
                   <option value="" disabled selected hidden>Select Position</option>
                   <?php foreach ($position as $key => $pos) : ?>
                     <option value="<?php echo $pos['id']; ?>"><?php echo $pos['positionName']; ?></option>
@@ -155,7 +232,6 @@
     </div>
   </div>
 </div>
-
 
 
 <!-- Delete Modal-->

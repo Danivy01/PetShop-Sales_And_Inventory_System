@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-   <?php include('views/includes/head.php'); ?>
-</head> 
+    <?php include('views/includes/head.php'); ?>
+</head>
 
 <body class="bg-gradient-primary">
     <?php print_r($_SESSION); ?>
@@ -11,6 +11,8 @@
     <?php if (isset($_SESSION['randomId'])) : ?>
 
         <?php include('controllers/topBarController.php'); ?>
+
+        <?php include('views/includes/modal.php'); ?>
 
         <?php include('views/includes/sidebar.php'); ?>
 

@@ -39,7 +39,7 @@ class Details extends Database
             $table .= "<td class='text-center'>" . $emp['middleName'] . "</td>";
             $table .= "<td class='text-center'>" . $emp['lastName'] . "</td>";
             $table .= "<td class='text-center'>" . $emp['positionName'] . "</td>";
-            $table .= "<td class='text-center'><a href='#' data-toggle='modal' data-id='" . $emp['id'] . "' data-target='#employeeModal' type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+            $table .= "<td class='text-center'><a href='#' data-toggle='modal' data-id='" . $emp['id'] . "' data-target='#editEmployeeModal' type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
         }
 
         return $table;
@@ -152,5 +152,88 @@ class Details extends Database
     public function updateCustomer($data)
     {
         return $this->customerDetails(2, $data);
+    }
+
+    public function export($type)
+    {
+        $table = "";
+
+        if ($type == "customerExcel")
+        {
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='3'>List of Customers for ".date("F j, Y")."</th>";
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>First Name</th>";
+            $table .= "<th>Last Name</th>";
+            $table .= "<th>Phone Number</th>";
+            $table .= "</tr>";
+
+            $customer = $this->customerDetails();
+
+            if (count($customer) > 0)
+            {
+                foreach ($customer AS $cust)
+                {
+                    $table .= "<tr>";
+                    $table .= "<td>" . $cust['firstName'] . "</td>";
+                    $table .= "<td>" . $cust['lastName'] . "</td>";
+                    $table .= "<td>'" . $cust['phoneNumber'] . "</td>";
+                    $table .= "</tr>";
+                }
+            }
+            else
+            {
+                $table .= "<tr>";
+                $table .= "<td colspan='3' class='text-center'>No records found.</td>";
+                $table .= "</tr>";
+            }
+
+            $table .= "</table>";
+        }
+        else if ($type == "employeeExcel")
+        {
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='4'>List of Employees for ".date("F j, Y")."</th>";
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Name</th>";
+            $table .= "<th>Username</th>";
+            $table .= "<th>Access Type</th>";
+            $table .= "<th>Created At</th>";
+            $table .= "</tr>";
+
+            $employee = $this->employeeDetails("", 1);
+
+            if (count($employee) > 0)
+            {
+                foreach ($employee AS $emp)
+                {
+                    $table .= "<tr>";
+                    $table .= "<td>" . $emp['firstName'] . "</td>";
+                    $table .= "<td>" . $emp['middleName'] . "</td>";
+                    $table .= "<td>" . $emp['lastName'] . "</td>";
+                    $table .= "<td>" . $emp['position'] . "</td>";
+                    $table .= "</tr>";
+                }
+            }
+            else
+            {
+                $table .= "<tr>";
+                $table .= "<td colspan='4' class='text-center'>No records found.</td>";
+                $table .= "</tr>";
+            }
+
+            $table .= "</table>";
+        }
+
+        return $table;
+    }
+
+    public function insertEmployee($data)
+    {
+        return $this->employeeDetails("", 2, $data);
     }
 }

@@ -70,9 +70,9 @@ class Database
     return $user;
   }
 
-  protected function employeeDetails($userId = "", $type = 0) // Query to get the employee details
+  protected function employeeDetails($userId = "", $type = 0, $data = []) // Query to get the employee details
   {
-    $data = [];
+    $values = [];
 
     if ($type == 0)
     {
@@ -80,9 +80,10 @@ class Database
       $stmt = $this->connect()->prepare($sql);
       $stmt->execute(['userId' => $userId]);
     }
-    else if ($type = 1)
+    else if ($type == 1)
     {
-      $sql = "SELECT 
+      $sql = "SELECT
+              e.id, 
               e.firstName, 
               e.middleName, 
               e.lastName,
@@ -91,6 +92,8 @@ class Database
               e.phoneNumber,
               e.hiredDate,
               e.location,
+              e.province,
+              e.municipality,
               p.positionName
               FROM employeedetails e
               LEFT JOIN position p ON p.id = e.positionId";
@@ -98,13 +101,40 @@ class Database
       $stmt = $this->connect()->prepare($sql);
       $stmt->execute();
     }
-    
-    while ($row = $stmt->fetch()) 
+    else if ($type == 2)
     {
-      $data[] = $row;
+      $sql = "INSERT INTO employeedetails (firstName, middleName, lastName, gender, emailAddress, phoneNumber, positionId, hiredDate, location, province, municipality)
+              VALUES (:firstName, :middleName, :lastName, :gender, :email, :phoneNumber, :position, :hiredDate, :location, :province, :municipality)";
+      $stmt = $this->connect()->prepare($sql);
+
+      $stmt->execute([
+        'firstName'     => $data['firstname'],
+        'middleName'    => $data['middleName'],
+        'lastName'      => $data['lastname'],
+        'gender'        => $data['gender'],
+        'email'         => $data['email'],
+        'phoneNumber'   => $data['phonenumber'],
+        'position'      => $data['position'],
+        'hiredDate'     => $data['dateHired'],
+        'location'      => $data['address'],
+        'province'      => $data['province'],
+        'municipality'  => $data['city']
+      ]);
     }
 
-    return $data;
+    if ($type == 0 OR $type == 1)
+    {
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else
+    {
+      return $stmt->rowCount() > 0 ? true : false;
+    }
   }
 
   protected function userTable() // Query to get the user's table

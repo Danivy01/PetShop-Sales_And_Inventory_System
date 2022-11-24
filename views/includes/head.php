@@ -18,5 +18,3 @@
 <?php session_start(); ?>
 
 <?php if (!isset($_SESSION)) header('Location: index.php'); ?>
-
-<?php include('views/includes/modal.php'); ?>
