@@ -24,4 +24,32 @@ if (isset($_SESSION['userId']))
     $type = $details->access();
     $typeName = $type[0]['type'];
     $accessType = ($type[0]['accessType'] == 0) ? "All" : "User";
+
+    // positions
+
+    $position = $details->allPosition(1);
+
+    // Table Data
+
+    if (isset($_GET['page'])) 
+    {
+        // Customer Table
+        if ($_GET['page'] == 1)
+        {
+            $customerTable = $details->customerTable();
+        }
+
+        // Employee Table
+        if ($_GET['page'] == 2)
+        {
+            $employeeTable = $details->employeeTable();
+        }
+        
+        // Accounts Table
+        if ($_GET['page'] == 7)
+        {
+            $adminTable = $details->accountsTable()['admin'];
+            $userTable = $details->accountsTable()['users'];
+        }
+    }
 }

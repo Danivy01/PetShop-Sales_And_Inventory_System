@@ -12,9 +12,9 @@
 
         <?php include('controllers/topBarController.php'); ?>
 
-        <?php include('views/includes/sidebar.php'); ?>
-
         <?php include('views/includes/modal.php'); ?>
+
+        <?php include('views/includes/sidebar.php'); ?>
 
         <?php if (!isset($_GET['page'])) : ?>
 
