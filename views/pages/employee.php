@@ -11,7 +11,7 @@
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#employeeModal">
                         Add Employee <i class="fas fa-fw fa-plus text-gray-400"></i>
                     </a>
-                    <button type="button" class="dropdown-item" onclick="exportFunction('customerExcel')">Export to Excel</button>
+                    <button type="button" class="dropdown-item" onclick="exportFunction('employeeExcel')">Export to Excel</button>
 
                 </div>
             </div>
