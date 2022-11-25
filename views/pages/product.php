@@ -7,9 +7,9 @@
                     <i class="fas fa-ellipsis-v fa-lg fa-fw text-gray-400"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                    <div class="dropdown-header">Supplier Options:</div>
+                    <div class="dropdown-header">Product Options:</div>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#productModal">
-                        Add Supplier <i class="fas fa-fw fa-plus text-gray-400"></i>
+                        Add Product <i class="fas fa-fw fa-plus text-gray-400"></i>
                     </a>
                     <button type="button" class="dropdown-item" onclick="exportFunction('customerExcel')">Export to Excel</button>
 

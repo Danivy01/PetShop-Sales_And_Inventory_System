@@ -257,7 +257,7 @@ class Database
     }
   }
 
-  protected function product($type = 0, $data = []) // Query for Product Table
+  protected function productDetails($type = 0, $data = []) // Query for Product Table
   {
     if ($type == 0)
     {
@@ -301,6 +301,69 @@ class Database
     {
       $stmt->execute(['productCode' => $data['productCode'], 'productName' => $data['productName'], 'productDescription' => $data['productDescription'], 'qtyStock' => $data['qtyStock'], 
       'onHand' => $data['onHand'], 'price' => $data['price'], 'category_id' => $data['category_id'], 'supplier_id' => $data['supplier_id'], 'date_stock_in' => $data['date_stock_in'], 'product_id' => $data['product_id']]);
+    }
+
+    if ($type == 0)
+    {
+      $data = [];
+
+      while ($row = $stmt->fetch()) 
+      {
+        $data[] = $row;
+      }
+
+      return $data;
+    }
+    else if ($type == 1)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 2)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+  }
+
+  protected function supplierDetails($type = 0, $data = []) // Query for Supplier Table
+  {
+    if ($type == 0)
+    {
+      $sql = "SELECT * FROM supplier";
+
+      if (count($data) > 0)
+      {
+        $sql .= " WHERE supplier_id = :supplier_id";
+      }
+    }
+    else if ($type == 1)
+    {
+      $sql = "INSERT INTO supplier (companyName, province, city, phoneNumber) VALUES (:companyName, :province, :city, :phoneNumber)";
+    }
+    else if ($type == 2)
+    {
+      $sql = "UPDATE supplier SET companyName = :companyName, province = :province, city = :city, phoneNumber = :phoneNumber WHERE supplier_id = :supplier_id";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0)
+    {
+      if (count($data) > 0)
+      {
+        $stmt->execute(['supplier_id' => $data['supplier_id']]);
+      }
+      else
+      {
+        $stmt->execute();
+      }
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute(['companyName' => $data['companyName'], 'province' => $data['province'],'city' => $data['city'], 'phoneNumber' => $data['phoneNumber']]);
+    }
+    else if ($type == 2)
+    {
+      $stmt->execute(['companyName' => $data['companyName'], 'province' => $data['province'],'city' => $data['city'], 'phoneNumber' => $data['phoneNumber'], 'supplier_id' => $data['supplier_id']]);
     }
 
     if ($type == 0)

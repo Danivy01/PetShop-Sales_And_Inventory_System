@@ -236,4 +236,118 @@ class Details extends Database
     {
         return $this->employeeDetails("", 2, $data);
     }
+
+    public function insertProduct($data)
+    {
+        return $this->productDetails(1, $data);
+    }
+
+    public function productTable()
+    {
+        $productTable = "";
+
+        $product = $this->productDetails();
+
+        if (count($product) > 0)
+        {
+            foreach ($product AS $prod)
+            {
+                $productTable .= "<tr>";
+                $productTable .= "<td class='text-center'>" . $prod['productCode'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['productName'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['productDescription'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['qtyStock'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['onHand'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['price'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['category_id'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['supplier_id'] . "</td>";
+                $productTable .= "<td class='text-center'>" . $prod['date_stock_in'] . "</td>";
+                $productTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#editCustomerModal' data-id='" . $prod['id'] . "' type='button' class='btn btn-primary bg-gradient-primary editCust' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+                $productTable .= "</tr>";
+            }
+        }
+        else
+        {
+            $productTable .= "<tr>";
+            $productTable .= "<td colspan='4' class='text-center'>No records found.</td>";
+            $productTable .= "</tr>";
+        }
+
+        return $productTable;
+    }
+
+    public function productModal($id)
+    {
+        $productDetails = $this->productDetails(0, array('id' => $id));
+
+        return json_encode([
+            'productCode' => $productDetails[0]['productCode'],
+            'productName' => $productDetails[0]['productName'],
+            'productDescription' => $productDetails[0]['productDescription'],
+            'qtyStock' => $productDetails[0]['qtyStock'],
+            'onHand' => $productDetails[0]['onHand'],
+            'price' => $productDetails[0]['price'],
+            'category_id' => $productDetails[0]['category_id'],
+            'supplier_id' => $productDetails[0]['supplier_id'],
+            'date_stock_in' => $productDetails[0]['date_stock_in'],
+            'product_id' => $productDetails[0]['product_id']
+        ]);
+    }
+
+    public function updateProduct($data)
+    {
+        return $this->productDetails(2, $data);
+    }
+
+    public function insertSupplier($data)
+    {
+        return $this->supplierDetails(1, $data);
+    }
+
+    public function supplierTable()
+    {
+        $supplierTable = "";
+
+        $supplier = $this->supplierDetails();
+
+        if (count($supplier) > 0)
+        {
+            foreach ($supplier AS $supp)
+            {
+                $supplierTable .= "<tr>";
+                $supplierTable .= "<td class='text-center'>" . $supp['companyName'] . "</td>";
+                $supplierTable .= "<td class='text-center'>" . $supp['province'] . "</td>";
+                $supplierTable .= "<td class='text-center'>" . $supp['city'] . "</td>";
+                $supplierTable .= "<td class='text-center'>" . $supp['phoneNumber'] . "</td>";
+                $supplierTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#editCustomerModal' data-id='" . $supp['supplier_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editCust' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+                $supplierTable .= "</tr>";
+            }
+        }
+        else
+        {
+            $supplierTable .= "<tr>";
+            $supplierTable .= "<td colspan='4' class='text-center'>No records found.</td>";
+            $supplierTable .= "</tr>";
+        }
+
+        return $supplierTable;
+    }
+
+    public function supplierModal($supplier_id)
+    {
+        $supplierDetails = $this->supplierDetails(0, array('supplier_id' => $supplier_id));
+
+        return json_encode([
+            'companyName' => $supplierDetails[0]['companyName'],
+            'province' => $supplierDetails[0]['province'],
+            'city' => $supplierDetails[0]['city'],
+            'phoneNumber' => $supplierDetails[0]['phoneNumber'],
+            'supplier_id' => $supplierDetails[0]['supplier_id']
+        ]);
+    }
+
+    public function updateSupplier($data)
+    {
+        return $this->supplierDetails(2, $data);
+    }
 }

@@ -60,9 +60,27 @@ if (isset($_POST['addProduct']))
 {
     $data = array(
         'productCode'     => isset($_POST['productCode']) ? $_POST['productCode'] : '',
-        'lastName'      => isset($_POST['lastname']) ? $_POST['lastname'] : '',
-        'phoneNumber'   => isset($_POST['phonenumber']) ? $_POST['phonenumber'] : '',
+        'productName'      => isset($_POST['productName']) ? $_POST['productName'] : '',
+        'productDescription'   => isset($_POST['productDescription']) ? $_POST['productDescription'] : '',
+        'qtyStock'      => isset($_POST['qtyStock']) ? $_POST['qtyStock'] : '',
+        'onHand'      => isset($_POST['onHand']) ? $_POST['onHand'] : '',
+        'price'      => isset($_POST['price']) ? $_POST['price'] : '',
+        'category_id'      => isset($_POST['category_id']) ? $_POST['category_id'] : '',
+        'supplier_id'      => isset($_POST['supplier_id']) ? $_POST['supplier_id'] : '',
+        'date_stock_in'      => isset($_POST['FromDate']) ? $_POST['FromDate'] : '',
     );
 
-    echo $info->insertCustomer($data);
+    echo $info->insertProduct($data);
+}
+
+if (isset($_POST['addSupplier']))
+{
+    $data = array(
+        'companyName'     => isset($_POST['companyName']) ? $_POST['companyName'] : '',
+        'province'      => isset($_POST['province']) ? $_POST['province'] : '',
+        'city'      => isset($_POST['city']) ? $_POST['city'] : '',
+        'phoneNumber'   => isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : '',
+    );
+
+    echo $info->insertSupplier($data);
 }

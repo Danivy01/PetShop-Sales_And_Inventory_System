@@ -8,7 +8,7 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body"><?php echo  $firstName; ?> are you sure do you want to logout?</div>
+      <div class="modal-body"><?php echo  $firstName; ?>, are you sure do you want to logout?</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         <a class="btn btn-primary" href="controllers/logoutController.php">Logout</a>
@@ -39,9 +39,11 @@
             <input class="form-control" placeholder="Phone Number" id="phonenumber">
           </div>
           <hr>
+          <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -71,9 +73,11 @@
           </div>
           <input type="hidden" id="editId">
           <hr>
+          <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -148,9 +152,11 @@
             <select class="form-control" id="city" placeholder="City" name="city"></select>
           </div>
           <hr>
+          <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -224,9 +230,11 @@
             <select class="form-control" id="city" placeholder="City" name="city"></select>
           </div>
           <hr>
+          <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -322,14 +330,16 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <input placeholder="Date Stock In" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="hireddate" class="form-control" />
+                <input placeholder="Date Stock In" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="productdate" class="form-control" />
               </div>
             </div>
           </div>
           <hr>
+          <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-success" ><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
@@ -361,9 +371,11 @@
             <input class="form-control" placeholder="Phone Number" id="supplPhoneNum">
           </div>
           <hr>
-          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <div class="col-md-12 text-center">
+          <button type="submit" class="btn btn-success text-align-center"><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
