@@ -265,32 +265,22 @@
       </div>
       <div class="modal-body">
         <form role="form" method="post" id="addProductForm">
+          <div class="row">
+            <div class="col-md-6">
               <div class="form-group">
                 <input class="form-control" placeholder="Product Code" id="prodCode">
               </div>
-              <div class="form-group">
+            </div>
+            <div class="col-md-6">
+            <div class="form-group">
                 <input class="form-control" placeholder="Product Name" id="prodName">
-              </div>
+            </div>
+            </div>
+          </div> 
               <div class="form-group">
                 <textarea cols="30" rows="5" class="form-control" placeholder="Description" id="prodDescription"></textarea>
               </div>
-            <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <input placeholder="Date Stock In" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="hireddate" class="form-control" />
-              </div>
-              <div class="form-group">
-                <input class="form-control" placeholder="On Hand" id="prodOnHand">
-              </div>
-            </div>
-              <div class="form-group">
-                <input class="form-control" placeholder="Price" id="prodPrice">
-              </div>
-              <div class="form-group">
-                <input class="form-control" placeholder="Quantity Stock" id="prodQtyStock">
-              </div>
-            </div>
-            <div class="row">
+          <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <select id="cusPosition" class="form-control">
@@ -302,7 +292,8 @@
                 </select>
               </div>
             </div>
-              <div class="form-group">
+          <div class="col-md-6">
+            <div class="form-group">
                 <select class='form-control' id='prodSupplier'>
                   <option value="" disabled selected hidden>Select Supplier</option>
                   <option value="0">Male</option>
@@ -310,8 +301,33 @@
                 </select>
               </div>
           </div>
+          </div>
+            <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" placeholder="On Hand" id="prodOnHand">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" placeholder="Price" id="prodPrice">
+              </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" placeholder="Quantity Stock" id="prodQtyStock">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input placeholder="Date Stock In" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="hireddate" class="form-control" />
+              </div>
+            </div>
+          </div>
           <hr>
-          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="submit" class="btn btn-success" ><i class="fa fa-check fa-fw"></i>Save</button>
           <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         </form>
