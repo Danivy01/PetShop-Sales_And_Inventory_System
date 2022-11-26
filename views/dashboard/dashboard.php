@@ -9,7 +9,7 @@
                         <div class="col mr-0">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Customers</div>
                             <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                Record(s)
+                                <?php echo $customerCount; ?> Record(s)
                             </div>
                         </div>
                         <div class="col-auto">
@@ -50,7 +50,7 @@
                         <div class="col mr-0">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Employees</div>
                             <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                Record(s)
+                                <?php echo $empCount; ?> Record(s)
                             </div>
                         </div>
                         <div class="col-auto">
@@ -68,7 +68,7 @@
                         <div class="col mr-0">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Registered Account</div>
                             <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                Record(s)
+                              <?php echo $userCount; ?> Record(s)
                             </div>
                         </div>
                         <div class="col-auto">
@@ -110,6 +110,7 @@
 
     </div>
 
+    <?php if ($accessType == "All"): ?> 
     <!-- RECENT PRODUCTS -->
     <div class="col-lg-3">
         <div class="card shadow h-100">
@@ -142,4 +143,6 @@
             </div>
         </div>
     </div>
+
+    <?php endif; ?>
 </div>

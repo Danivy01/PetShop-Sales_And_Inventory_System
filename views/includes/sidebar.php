@@ -56,6 +56,7 @@
       <div class="sidebar-heading">
         General
       </div>
+      <?php if ($accessType == "All"): ?>
       <!-- Tables Buttons -->
       <li class="nav-item">
         <a class="nav-link" href="?page=1">
@@ -81,11 +82,15 @@
           <span>Inventory</span></a>
       </li>
 
+      <?php endif; ?>
+
       <li class="nav-item">
         <a class="nav-link" href="?page=5">
           <i class="fas fa-fw fa-retweet"></i>
           <span>Transaction</span></a>
       </li>
+
+      <?php if ($accessType == "All"): ?>
 
       <li class="nav-item">
         <a class="nav-link" href="?page=6">
@@ -98,6 +103,8 @@
           <i class="fas fa-fw fa-users"></i>
           <span>Accounts</span></a>
       </li>
+
+      <?php endif; ?>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 

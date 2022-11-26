@@ -29,6 +29,12 @@ if (isset($_SESSION['userId']))
 
     $position = $details->allPosition(1);
 
+    // Records
+
+    $empCount = $details->employeeCount();
+    $customerCount = $details->customerCount();
+    $userCount = $details->userCount();
+
     // Table Data
 
     if (isset($_GET['page'])) 
@@ -50,6 +56,14 @@ if (isset($_SESSION['userId']))
         {
             $adminTable = $details->accountsTable()['admin'];
             $userTable = $details->accountsTable()['users'];
+        }
+
+        if ($_GET['page'] == 8)
+        {
+            $id = $_GET['id'];
+            $randomId = $_SESSION['randomId'];
+
+            $settings = $details->userSettings($id, $randomId);
         }
     }
 }

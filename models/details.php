@@ -39,7 +39,7 @@ class Details extends Database
             $table .= "<td class='text-center'>" . $emp['middleName'] . "</td>";
             $table .= "<td class='text-center'>" . $emp['lastName'] . "</td>";
             $table .= "<td class='text-center'>" . $emp['positionName'] . "</td>";
-            $table .= "<td class='text-center'><a href='#' data-toggle='modal' data-id='" . $emp['id'] . "' data-target='#editEmployeeModal' type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+            $table .= "<td class='text-center'><a href='#' data-toggle='modal' data-id='" . $emp['id'] . "' data-target='#editEmployeeModal' type='button' class='btn btn-primary bg-gradient-primary editEmp' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
         }
 
         return $table;
@@ -200,9 +200,11 @@ class Details extends Database
             $table .= "</tr>";
             $table .= "<tr>";
             $table .= "<th>Name</th>";
-            $table .= "<th>Username</th>";
-            $table .= "<th>Access Type</th>";
-            $table .= "<th>Created At</th>";
+            $table .= "<th>Email Address</th>";
+            $table .= "<th>Phone Number</th>";
+            $table .= "<th>Position</th>";
+            $table .= "<th>Date Hired</th>";
+            $table .= "<th>Address</th>";
             $table .= "</tr>";
 
             $employee = $this->employeeDetails("", 1);
@@ -212,17 +214,18 @@ class Details extends Database
                 foreach ($employee AS $emp)
                 {
                     $table .= "<tr>";
-                    $table .= "<td>" . $emp['firstName'] . "</td>";
-                    $table .= "<td>" . $emp['middleName'] . "</td>";
-                    $table .= "<td>" . $emp['lastName'] . "</td>";
-                    $table .= "<td>" . $emp['position'] . "</td>";
-                    $table .= "</tr>";
+                    $table .= "<td>" . $emp['firstName'] . " " . $emp['middleName'] . " " . $emp['lastName'] . "</td>";
+                    $table .= "<td>" . $emp['emailAddress'] . "</td>";
+                    $table .= "<td>'" . $emp['phoneNumber'] . "</td>";
+                    $table .= "<td>" . $emp['positionName'] . "</td>";
+                    $table .= "<td>" . date("F j, Y", strtotime($emp['hiredDate'])) . "</td>";
+                    $table .= "<td>" . $emp['location'] . " " . $emp['municipality'] . " " . $emp['province'] . "</td>";
                 }
             }
             else
             {
                 $table .= "<tr>";
-                $table .= "<td colspan='4' class='text-center'>No records found.</td>";
+                $table .= "<td colspan='6' class='text-center'>No records found.</td>";
                 $table .= "</tr>";
             }
 
@@ -235,5 +238,87 @@ class Details extends Database
     public function insertEmployee($data)
     {
         return $this->employeeDetails("", 2, $data);
+    }
+
+    public function employeeModal($id)
+    {
+        $emp = $this->employeeDetails($id);
+        $firstName = $emp[0]['firstName'];
+        $middleName = $emp[0]['middleName'];
+        $lastName = $emp[0]['lastName'];
+        $gender = $emp[0]['gender'];
+        $emailAddress = $emp[0]['emailAddress'];
+        $phoneNumber = $emp[0]['phoneNumber'];
+        $hiredDate = $emp[0]['hiredDate'];
+        $location = $emp[0]['location'];
+        $province = $emp[0]['province'];
+        $municipality = $emp[0]['municipality'];
+        $position = $emp[0]['positionId'];
+
+        return json_encode(
+            [
+                'firstName' => $firstName,
+                'middleName' => $middleName,
+                'lastName' => $lastName,
+                'gender' => $gender,
+                'email' => $emailAddress,
+                'phonenumber' => $phoneNumber,
+                'position' => $position,
+                'fromdate' => $hiredDate,
+                'address' => $location,
+                'province' => $province,
+                'city' => $municipality,
+            ]
+        );
+    }
+
+    public function updateEmployee($data)
+    {
+        return $this->employeeDetails("", 3, $data);
+    }
+
+    public function employeeCount()
+    {
+        return $this->employeeDetails("", 4);
+    }
+
+    public function customerCount()
+    {
+        return $this->customerDetails(3);
+    }
+
+    public function userCount()
+    {
+        return $this->loginUser([], 2);
+    }
+
+    public function userSettings($id, $randomId)
+    {
+        $empDetails = $this->employeeDetails($id);
+        $userDetails = $this->loginUser(array("randomId" => $randomId), 1);
+
+        $firstName = $empDetails[0]['firstName'];
+        $middleName = $empDetails[0]['middleName'];
+        $lastName = $empDetails[0]['lastName'];
+        $gender = $empDetails[0]['gender'];
+        $emailAddress = $empDetails[0]['emailAddress'];
+        $phoneNumber = $empDetails[0]['phoneNumber'];
+        $hiredDate = $empDetails[0]['hiredDate'];
+        $location = $empDetails[0]['location'];
+        $province = $empDetails[0]['province'];
+        $municipality = $empDetails[0]['municipality'];
+
+        $userName = $userDetails[0]['userName'];
+        $password = $userDetails[0]['password'];
+
+        return [$firstName, $lastName, $gender, $emailAddress, $phoneNumber, $hiredDate, $location, $province, $municipality, $userName, $password, $middleName];
+    }
+
+    public function updateSettings($data, $userData)
+    {
+        $this->employeeDetails("", 5, $data);
+        $this->loginUser($userData, 3);
+        
+        return true;
     }
 }

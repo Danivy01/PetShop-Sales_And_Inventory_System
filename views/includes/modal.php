@@ -169,38 +169,39 @@
       </div>
       <div class="modal-body">
         <form role="form" method="post" id="editEmployeeForm">
+          <input type="hidden" id="editIdEmp">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <input class="form-control" placeholder="First Name" id="cusFirstName">
+                <input class="form-control" placeholder="First Name" id="editCusFirstName">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Middle Name" id="cusMiddleName">
+                <input class="form-control" placeholder="Middle Name" id="editCusMiddleName">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Last Name" id="cusLastname">
+                <input class="form-control" placeholder="Last Name" id="editCusLastname">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <select class='form-control' id='cusGender'>
+                <select class='form-control' id='editCusGender'>
                   <option value="" disabled selected hidden>Select Gender</option>
                   <option value="0">Male</option>
                   <option value="1">Female</option>
                 </select>
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Email" id="cusEmail">
+                <input class="form-control" placeholder="Email" id="editCusEmail">
               </div>
               <div class="form-group">
-                <input class="form-control" placeholder="Phone Number" id="cusPhoneNumber">
+                <input class="form-control" placeholder="Phone Number" id="editCusPhoneNumber">
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <select id="cusPosition" class="form-control">
+                <select id="editCusPosition" class="form-control">
                   <option value="" disabled selected hidden>Select Position</option>
                   <?php foreach ($position as $key => $pos) : ?>
                     <option value="<?php echo $pos['id']; ?>"><?php echo $pos['positionName']; ?></option>
@@ -210,18 +211,18 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <input placeholder="Date Hired" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="FromDate" name="hireddate" class="form-control" />
+                <input placeholder="Date Hired" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="editFromDate" name="hireddate" class="form-control" />
               </div>
             </div>
           </div>
           <div class="form-group">
-            <textarea id="address" cols="30" rows="5" class="form-control" placeholder="House/Unit/Flr #, Bldg Name, Blk or Lot #"></textarea>
+            <textarea id="editAddress" cols="30" rows="5" class="form-control" placeholder="House/Unit/Flr #, Bldg Name, Blk or Lot #"></textarea>
           </div>
           <div class="form-group">
-            <select class="form-control" id="province" placeholder="Province" name="province"></select>
+            <input class="form-control" id="editProvince" placeholder="Province" name="province"></input>
           </div>
           <div class="form-group">
-            <select class="form-control" id="city" placeholder="City" name="city"></select>
+            <input class="form-control" id="editCity" placeholder="City" name="city"></input>
           </div>
           <hr>
           <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>

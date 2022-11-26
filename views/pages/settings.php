@@ -5,15 +5,24 @@
     <div class="card-body">
 
 
-        <form role="form" method="post" action="settings_edit.php">
-            <input type="hidden" name="id" value="<?php echo $zz; ?>" />
+        <form method="post" id="editSettings">
+            <input type="hidden" id="setid" value="<?php echo $_GET['id']; ?>" />
+            <input type="hidden" id="randomId" value="<?php echo $_SESSION['randomId']; ?>" />
 
             <div class="form-group row text-left text-primary">
                 <div class="col-sm-3" style="padding-top: 5px;">
                     First Name:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="First Name" name="firstname" value="<?php echo $a; ?>" required>
+                    <input class="form-control" placeholder="First Name" id="setfirstname" value="<?php echo $settings[0]; ?>">
+                </div>
+            </div>
+            <div class="form-group row text-left text-primary">
+                <div class="col-sm-3" style="padding-top: 5px;">
+                    Middle Name:
+                </div>
+                <div class="col-sm-9">
+                    <input class="form-control" placeholder="Middle Name" id="setmiddlename" value="<?php echo $settings[11]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -21,7 +30,7 @@
                     Last Name:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Last Name" name="lastname" value="<?php echo $b; ?>" required>
+                    <input class="form-control" placeholder="Last Name" id="setlastname" value="<?php echo $settings[1]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -29,10 +38,10 @@
                     Gender:
                 </div>
                 <div class="col-sm-9">
-                    <select class='form-control' name='gender' required>
+                    <select class='form-control' id='setgender'>
                         <option value="" disabled selected hidden>Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="Male" <?php if ($settings[2] == 0) echo "selected"; ?>>Male</option>
+                        <option value="Female" <?php if ($settings[2] == 1) echo "selected"; ?>>Female</option>
                     </select>
                 </div>
             </div>
@@ -41,7 +50,7 @@
                     Username:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Username" name="username" value="<?php echo $d; ?>" required>
+                    <input class="form-control" placeholder="Username" id="setusername" value="<?php echo $settings[9]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -49,7 +58,7 @@
                     Password:
                 </div>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" placeholder="Password" name="password" value="" required>
+                    <input type="password" class="form-control" placeholder="Password" id="setpassword" value="<?php echo $settings[10]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -57,7 +66,7 @@
                     Email:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Email" name="email" value="<?php echo $f; ?>" required>
+                    <input class="form-control" placeholder="Email" id="setemail" value="<?php echo $settings[3]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -65,15 +74,7 @@
                     Contact #:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Contact #" name="phone" value="<?php echo $g; ?>" required>
-                </div>
-            </div>
-            <div class="form-group row text-left text-primary">
-                <div class="col-sm-3" style="padding-top: 5px;">
-                    Role:
-                </div>
-                <div class="col-sm-9">
-                    <input class="form-control" placeholder="Role" name="role" value="<?php echo $h; ?>" readonly>
+                    <input class="form-control" placeholder="Contact #" id="setphone" value="<?php echo $settings[4]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -81,7 +82,15 @@
                     Hired Date:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Hired Date" name="hireddate" value="<?php echo $i; ?>" required>
+                    <input class="form-control" placeholder="Hired Date" id="sethireddate" value="<?php echo $settings[5]; ?>">
+                </div>
+            </div>
+            <div class="form-group row text-left text-primary">
+                <div class="col-sm-3" style="padding-top: 5px;">
+                    Address:
+                </div>
+                <div class="col-sm-9">
+                    <input class="form-control" placeholder="Address" id="setaddress" value="<?php echo $settings[6]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -89,7 +98,7 @@
                     Province:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="Province" name="province" value="<?php echo $j; ?>" required>
+                    <input class="form-control" placeholder="Province" id="setprovince" value="<?php echo $settings[7]; ?>">
                 </div>
             </div>
             <div class="form-group row text-left text-primary">
@@ -97,15 +106,7 @@
                     City / Municipality:
                 </div>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="City / Municipality" name="city" value="<?php echo $k; ?>" required>
-                </div>
-            </div>
-            <div class="form-group row text-left text-primary">
-                <div class="col-sm-3" style="padding-top: 5px;">
-                    Account Type:
-                </div>
-                <div class="col-sm-9">
-                    <input class="form-control" placeholder="Account Type" name="type" value="<?php echo $l; ?>" readonly>
+                    <input class="form-control" placeholder="City / Municipality" id="setcity" value="<?php echo $settings[8]; ?>">
                 </div>
             </div>
             <hr>

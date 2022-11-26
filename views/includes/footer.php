@@ -375,6 +375,308 @@
             }
         })
 
+        $(".editEmp").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    getEmp: true
+                },
+                success: function(data) {
+                    let customer = JSON.parse(data);
+                    $("#editIdEmp").val(id);
+                    $("#editCusFirstName").val(customer.firstName);
+                    $("#editCusMiddleName").val(customer.middleName);
+                    $("#editCusLastname").val(customer.lastName);
+                    $("#editCusGender").val(customer.gender);
+                    $("#editCusEmail").val(customer.email);
+                    $("#editCusPhoneNumber").val(customer.phonenumber);
+                    $("#editCusPosition").val(customer.position);
+                    $("#editFromDate").val(customer.fromdate);
+                    $("#editAddress").text(customer.address);
+                    $("#editProvince").val(customer.province);
+                    $("#editCity").val(customer.city);
+                }
+            })
+        })
+
+        $("#editEmployeeForm").on("submit", function(e) {
+            e.preventDefault();
+
+            let firstname = $("#editCusFirstName").val();
+            let middleName = $("#editCusMiddleName").val();
+            let lastname = $("#editCusLastname").val();
+            let gender = $("#editCusGender").val();
+            let email = $("#editCusEmail").val();
+            let phonenumber = $("#editCusPhoneNumber").val();
+            let position = $("#editCusPosition").val();
+            let FromDate = $("#editFromDate").val();
+            let address = $("#editAddress").val();
+            let province = $("#editProvince").val();
+            let city = $("#editCity").val();
+            let editIdEmp = $("#editIdEmp").val();
+
+            let pattern = /^[0-9]{11}$/;
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (firstname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'First Name cannot be blank!',
+                })
+            } else if (lastname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Last Name cannot be blank!',
+                })
+            } else if (email.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Email cannot be blank!',
+                })
+            } else if (!emailPattern.test(email)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Email!',
+                })
+            } else if (phonenumber.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Phone Number cannot be blank!',
+                })
+            } else if (!pattern.test(phonenumber)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else if (position == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Position cannot be blank!',
+                })
+            } else if (FromDate.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'From Date cannot be blank!',
+                })
+            } else if (address.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Address cannot be blank!',
+                })
+            } else if (province.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Province cannot be blank!',
+                })
+            } else if (city.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'City cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        firstname: firstname,
+                        middleName: middleName,
+                        lastname: lastname,
+                        gender: gender,
+                        email: email,
+                        phonenumber: phonenumber,
+                        position: position,
+                        FromDate: FromDate,
+                        address: address,
+                        province: province,
+                        city: city,
+                        editIdEmp: editIdEmp,
+                        editEmployee: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Employee Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        // User Settings
+
+        $("#editSettings").on("submit", function(e) {
+            e.preventDefault();
+
+            let id = $("#setid").val();
+            let randomId = $("#randomId").val();
+            let firstname = $("#setfirstname").val();
+            let middlename = $("#setmiddlename").val();
+            let lastname = $("#setlastname").val();
+            let gender = $("#setgender").val();
+            let username = $("#setusername").val();
+            let password = $("#setpassword").val();
+            let email = $("#setemail").val();
+            let phone = $("#setphone").val();
+            let hireddate = $("#sethireddate").val();
+            let address = $("#setaddress").val();
+            let province = $("#setprovince").val();
+            let city = $("#setcity").val();
+
+            let pattern = /^[0-9]{11}$/;
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (firstname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'First Name cannot be blank!',
+                })
+            } else if (lastname.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Last Name cannot be blank!',
+                })
+            } else if (email.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Email cannot be blank!',
+                })
+            } else if (!emailPattern.test(email)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Email!',
+                })
+            } else if (phone.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Phone Number cannot be blank!',
+                })
+            } else if (!pattern.test(phone)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else if (hireddate.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Hired Date cannot be blank!',
+                })
+            } else if (address.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Address cannot be blank!',
+                })
+            } else if (province.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Province cannot be blank!',
+                })
+            } else if (city.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'City cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        id: id,
+                        randomId: randomId,
+                        firstname: firstname,
+                        middlename: middlename,
+                        lastname: lastname,
+                        gender: gender,
+                        username: username,
+                        password: password,
+                        email: email,
+                        phone: phone,
+                        hireddate: hireddate,
+                        address: address,
+                        province: province,
+                        city: city,
+                        editSettings: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Settings Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
     <?php else : ?>
 
         $("#loginForm").on("submit", function(e) {

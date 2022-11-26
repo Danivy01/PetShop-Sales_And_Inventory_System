@@ -33,15 +33,26 @@ class Database
     return $stmt->rowCount() > 0 ? true : false;
   }
 
-  protected function loginUser($data, $type = 0)
+  protected function loginUser($data = [], $type = 0)
   {
     // Type = 0 -> Used to Login the User
     // Type = 1 -> Get User Data
 
-    $user = [];
+    if ($type == 0 OR $type == 1)
+    {
+      $user = [];
 
-    $sql = "SELECT * FROM users";
-
+      $sql = "SELECT * FROM users";
+    }
+    else if ($type == 2)
+    {
+      $sql = "SELECT COUNT(*) AS countUsers FROM users";
+    }
+    else if ($type == 3)
+    {
+      $sql = "UPDATE users SET userName = :user, password = :pass WHERE randomId = :randomId";
+    }
+    
     if ($type == 0)
     {
       $sql .= " WHERE userName = :user AND password = :password";
@@ -61,13 +72,34 @@ class Database
     {
       $stmt->execute(['randomId' => $data['randomId']]);
     }
-
-    while ($row = $stmt->fetch()) 
+    else if ($type == 2)
     {
-      $user[] = $row;
+      $stmt->execute();
+    }
+    else if ($type == 3)
+    {
+      $stmt->execute(['user' => $data['user'], 'pass' => $data['password'], 'randomId' => $data['randomId']]);
     }
 
-    return $user;
+    if ($type == 0 OR $type == 1)
+    {
+      while ($row = $stmt->fetch()) 
+      {
+        $user[] = $row;
+      }
+
+      return $user;
+    }
+    else if ($type == 2)
+    {
+      $row = $stmt->fetch();
+
+      return $row['countUsers'];
+    }
+    else if ($type == 3)
+    {
+      return $stmt->rowCount() > 0 ? true : false;
+    }
   }
 
   protected function employeeDetails($userId = "", $type = 0, $data = []) // Query to get the employee details
@@ -121,6 +153,58 @@ class Database
         'municipality'  => $data['city']
       ]);
     }
+    else if ($type == 3)
+    {
+      $sql = "UPDATE employeeDetails SET firstName = :firstname, middleName = :middleName, 
+              lastName = :lastname, gender = :gender, emailAddress = :email, 
+              phoneNumber = :phonenumber, positionId = :position, hiredDate = :dateHired, 
+              location = :address, province = :province, municipality = :city 
+              WHERE id = :id";
+      $stmt = $this->connect()->prepare($sql);
+
+      $stmt->execute([
+        'firstname'     => $data['firstname'],
+        'middleName'    => $data['middleName'],
+        'lastname'      => $data['lastname'],
+        'gender'        => $data['gender'],
+        'email'         => $data['email'],
+        'phonenumber'   => $data['phonenumber'],
+        'position'      => $data['position'],
+        'dateHired'     => $data['dateHired'],
+        'address'       => $data['address'],
+        'province'      => $data['province'],
+        'city'          => $data['city'],
+        'id'            => $data['id']
+      ]);
+    }
+    else if ($type == 4)
+    {
+      $sql = "SELECT COUNT(*) AS total FROM employeedetails";
+      $stmt = $this->connect()->prepare($sql);
+    }
+    else if ($type == 5)
+    {
+      $sql = "UPDATE employeeDetails SET firstName = :firstname, middleName = :middleName, 
+              lastName = :lastname, gender = :gender, emailAddress = :email, 
+              phoneNumber = :phonenumber, hiredDate = :dateHired, 
+              location = :address, province = :province, municipality = :city 
+              WHERE id = :id";
+      $stmt = $this->connect()->prepare($sql);
+
+      $stmt->execute([
+        'firstname'     => $data['firstname'],
+        'middleName'    => $data['middleName'],
+        'lastname'      => $data['lastname'],
+        'gender'        => $data['gender'],
+        'email'         => $data['email'],
+        'phonenumber'   => $data['phonenumber'],
+        'dateHired'     => $data['dateHired'],
+        'address'       => $data['address'],
+        'province'      => $data['province'],
+        'city'          => $data['city'],
+        'id'            => $data['id']
+      ]);
+    }
 
     if ($type == 0 OR $type == 1)
     {
@@ -131,9 +215,15 @@ class Database
 
       return $values;
     }
-    else
+    else if ($type != 4)
     {
       return $stmt->rowCount() > 0 ? true : false;
+    }
+    else if ($type == 4)
+    {
+      $stmt->execute();
+      $row = $stmt->fetch();
+      return $row['total'];
     }
   }
 
@@ -213,6 +303,10 @@ class Database
     {
       $sql = "UPDATE customer SET firstName = :firstName, lastName = :lastName, phoneNumber = :phoneNumber WHERE id = :id";
     }
+    else if ($type == 3)
+    {
+      $sql = "SELECT COUNT(*) AS customerCount FROM customer";
+    }
 
     $stmt = $this->connect()->prepare($sql);
 
@@ -235,6 +329,10 @@ class Database
     {
       $stmt->execute(['firstName' => $data['firstName'], 'lastName' => $data['lastName'], 'phoneNumber' => $data['phoneNumber'], 'id' => $data['id']]);
     }
+    else if ($type == 3)
+    {
+      $stmt->execute();
+    }
 
     if ($type == 0)
     {
@@ -254,6 +352,10 @@ class Database
     else if ($type == 2)
     {
       return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 3)
+    {
+      return $stmt->fetch()['customerCount'];
     }
   }
 }
