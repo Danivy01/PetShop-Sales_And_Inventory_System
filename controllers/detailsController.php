@@ -108,3 +108,86 @@ if (isset($_POST['editSettings']))
 
     echo $info->updateSettings($data, $user);
 }
+
+if (isset($_POST['addUser']))
+{
+    $data = array(
+        'userId'          => isset($_POST['selectUser']) ? $_POST['selectUser'] : '',
+        'typeId'          => isset($_POST['selectType']) ? $_POST['selectType'] : '',
+        'userName'        => isset($_POST['userName']) ? $_POST['userName'] : '',
+        'password'        => isset($_POST['password']) ? $_POST['password'] : '',
+    );
+
+    echo $info->addUser($data);
+}
+
+if (isset($_POST['editAdminModal']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->editUserModal($id);
+}
+
+if (isset($_POST['editUserModal']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->editUserModal($id);
+}
+
+if (isset($_POST['updateUser']))
+{
+    $data = array(
+        'userId'             => isset($_POST['editId']) ? $_POST['editId'] : '',
+        'user'               => isset($_POST['editUserName']) ? $_POST['editUserName'] : '',
+        'password'           => isset($_POST['editPassword']) ? $_POST['editPassword'] : '',
+    );
+
+    echo $info->updateUser($data);
+}
+
+if (isset($_POST['deleteUser']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->deleteUser($id);
+}
+
+if (isset($_POST['addSupplier']))
+{
+    $data = array(
+        'companyName'           => isset($_POST['companyName']) ? $_POST['companyName'] : '',
+        'phoneNumber'           => isset($_POST['companyPhone']) ? $_POST['companyPhone'] : '',
+        'province'              => isset($_POST['supplierProvince']) ? $_POST['supplierProvince'] : '',
+        'city'                  => isset($_POST['supplierCity']) ? $_POST['supplierCity'] : '',
+    );
+
+    echo $info->addSupplier($data);
+}
+
+if (isset($_POST['getSupplier']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->supplierModal($id);
+}
+
+if (isset($_POST['updateSupplier']))
+{
+    $data = array(
+        'id'            => isset($_POST['supplierEditId']) ? $_POST['supplierEditId'] : '',
+        'companyName'   => isset($_POST['editCompanyName']) ? $_POST['editCompanyName'] : '',
+        'phoneNumber'   => isset($_POST['editCompanyPhone']) ? $_POST['editCompanyPhone'] : '',
+        'province'      => isset($_POST['editSupplierProvince']) ? $_POST['editSupplierProvince'] : '',
+        'city'          => isset($_POST['editSupplierCity']) ? $_POST['editSupplierCity'] : '',
+    );
+
+    echo $info->updateSupplier($data);
+}
+
+if (isset($_POST['deleteSupplier']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->deleteSupplier($id);
+}

@@ -71,7 +71,7 @@ class Details extends Database
                     $adminTable .= "<td class='text-center'>" . $name . "</td>";
                     $adminTable .= "<td class='text-center'>" . $acc['userName'] . "</td>";
                     $adminTable .= "<td class='text-center'>" . $typeName . "</td>";
-                    $adminTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#accountModal' data-id='" . $acc['id'] . "' type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+                    $adminTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#editAdminModal' data-id='" . $empDetails[0]['id'] . "' type='button' class='btn btn-primary bg-gradient-primary editAdmin' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
                     $adminTable .= "</tr>";
                 }
                 else
@@ -87,9 +87,12 @@ class Details extends Database
                 {
                     $userTable .= "<tr>";
                     $userTable .= "<td class='text-center'>" . $name . "</td>";
-                    $userTable .= "<td class='text-center'>" . $acc['username'] . "</td>";
+                    $userTable .= "<td class='text-center'>" . $acc['userName'] . "</td>";
                     $userTable .= "<td class='text-center'>" . $typeName . "</td>";
-                    $userTable .= "<td class='text-center'><a href='#' data-toggle='modal' data-target='#accountModal' data-id='" . $acc['id'] . "' type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a></td>";
+                    $userTable .= "<td class='text-center'>
+                                <a href='#' data-toggle='modal' data-target='#editUserModal' data-id='" . $empDetails[0]['id'] . "' type='button' class='btn btn-primary bg-gradient-primary editUser' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
+                                <a href='#' onclick='deleteUser($acc[id])' type='button' class='btn btn-danger bg-gradient-danger deleteUser' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
+                                </td>";
                     $userTable .= "</tr>";
                 }
                 else
@@ -102,6 +105,38 @@ class Details extends Database
         }
 
         return array('admin' => $adminTable, 'users' => $userTable);
+    }
+
+    public function supplierTable()
+    {
+        $table = "";
+
+        $supplierDetails = $this->supplierDetails();
+
+        if (count($supplierDetails) > 0)
+        {
+            foreach ($supplierDetails AS $supplier)
+            {
+                $table .= "<tr>";
+                $table .= "<td class='text-center'>" . $supplier['companyName'] . "</td>";
+                $table .= "<td class='text-center'>" . $supplier['province'] . "</td>";
+                $table .= "<td class='text-center'>" . $supplier['city'] . "</td>";
+                $table .= "<td class='text-center'>" . $supplier['phoneNumber'] . "</td>";
+                $table .= "<td class='text-center'>
+                        <a href='#' data-toggle='modal' data-target='#editSupplierModal' data-id='" . $supplier['supplier_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editSupplier' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
+                        <a href='#' onclick='deleteSupplier($supplier[supplier_id])' type='button' class='btn btn-danger bg-gradient-danger deleteSupplier' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
+                        </td>";
+                $table .= "</tr>";
+            }
+        }
+        else
+        {
+            $table .= "<tr>";
+            $table .= "<td colspan='5' class='text-center'>No records found.</td>";
+            $table .= "</tr>";
+        }
+
+        return $table;
     }
 
     public function insertCustomer($data)
@@ -231,6 +266,39 @@ class Details extends Database
 
             $table .= "</table>";
         }
+        else if ($type == "supplierExcel")
+        {
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='4'>List of Suppliers for " . date("F j, Y") . "</th>";
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Company Name</th>";
+            $table .= "<th>City</th>";
+            $table .= "<th>Province</th>";
+            $table .= "<th>Phone Number</th>";
+            $table .= "</tr>";
+
+            $supplierDetails = $this->supplierDetails();
+
+            if (count($supplierDetails) > 0)
+            {
+                foreach ($supplierDetails AS $supp)
+                {
+                    $table .= "<tr>";
+                    $table .= "<td>" . $supp['companyName'] . "</td>";
+                    $table .= "<td>" . $supp['city'] . "</td>";
+                    $table .= "<td>" . $supp['province'] . "</td>";
+                    $table .= "<td>'" . $supp['phoneNumber'] . "</td>";
+                }
+            }
+            else
+            {
+                $table .= "<tr>";
+                $table .= "<td colspan='4' class='text-center'>No records found.</td>";
+                $table .= "</tr>";
+            }
+        }
 
         return $table;
     }
@@ -320,5 +388,96 @@ class Details extends Database
         $this->loginUser($userData, 3);
         
         return true;
+    }
+
+    public function getAccessType()
+    {
+        return $this->accessFields("", 1);
+    }
+
+    public function getUserNoAccounts()
+    {
+        return $this->employeeDetails("", 6, []);
+    }
+
+    public function addUser($data)
+    {
+        return $this->userTable(1, $data);
+    }
+
+    public function editUserModal($id)
+    {
+        $empDetails = $this->employeeDetails($id);
+        $userDetails = $this->loginUser(array("userId" => $id), 4);
+
+        $fullName = $empDetails[0]['firstName'] . " " . $empDetails[0]['middleName'] . " " . $empDetails[0]['lastName'];
+        $userName = $userDetails[0]['userName'];
+        $password = $userDetails[0]['password'];
+        $typeId = $userDetails[0]['typeId'];
+
+        $accessField = $this->accessFields($typeId);
+        $type = $accessField[0]['type'];
+
+        return json_encode(
+            [
+                'fullName' => $fullName,
+                'username' => $userName,
+                'password' => $password,
+                'type' => $type,
+                'id' => $id,
+            ]
+        );
+    }
+
+    public function updateUser($data)
+    {
+        return $this->loginUser($data, 5);
+    }
+
+    public function deleteUser($id)
+    {
+        return $this->loginUser(array("id" => $id), 6);
+    }
+
+    public function addSupplier($data)
+    {
+        return $this->supplierDetails(1, $data);
+    }
+
+    public function supplierModal($id)
+    {
+        $supplierDetails = $this->supplierDetails(2, array("id" => $id));
+
+        $companyName = $supplierDetails[0]['companyName'];
+        $province = $supplierDetails[0]['province'];
+        $supplierId = $supplierDetails[0]['supplier_id'];
+        $city = $supplierDetails[0]['city'];
+        $phoneNumber = $supplierDetails[0]['phoneNumber'];
+
+        return json_encode(
+            [
+                'companyName' => $companyName,
+                'province' => $province,
+                'supplierId' => $supplierId,
+                'city' => $city,
+                'companyPhone' => $phoneNumber,
+                'id' => $id,
+            ]
+        );
+    }
+
+    public function updateSupplier($data)
+    {
+        return $this->supplierDetails(3, $data);
+    }
+
+    public function deleteSupplier($id)
+    {
+        return $this->supplierDetails(5, array("id" => $id));
+    }
+
+    public function supplierCount()
+    {
+        return $this->supplierDetails(4);
     }
 }

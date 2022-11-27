@@ -234,6 +234,224 @@
   </div>
 </div>
 
+<!-- User Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="addUser">
+          <div class="form-group">
+            <select class='form-control' id='selectUser'>
+              <?php print_r($noAccounts); ?>
+              <option value="" disabled selected hidden>Select User</option>
+              <?php if (count($noAccounts) > 0) : ?>
+                <?php foreach ($noAccounts as $key => $acc) : ?>
+                  <option value="<?php echo $acc['id']; ?>"><?php echo $acc['fullName']; ?></option>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <option value="" disabled selected hidden>No Employee Available</option>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <select class='form-control' id='selectType'>
+              <option value="" disabled selected hidden>Select User Type</option>
+              <?php foreach ($accessFields as $key => $access) : ?>
+                <option value="<?php echo $access['id']; ?>"><?php echo $access['type']; ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" id="userName">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" id="password">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Admin Modal -->
+<div class="modal fade" id="editAdminModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="updateAdmin">
+          <input type="hidden" id="editAdminId">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Full Name" id="adminFullName" readonly>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Type" id="adminType" readonly>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" id="adminEditUserName">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" id="adminEditPassword">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="updateUser">
+          <input type="hidden" id="editUserId">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Full Name" id="userFullName" readonly>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Type" id="userType" readonly>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" id="editUserName">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" id="editPassword">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Supplier Modal -->
+<div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Supplier</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="addSupplier">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Company Name" id="companyName">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Phone Number" id="companyPhone">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <select class="form-control" id="supplierProvince" placeholder="Province" name="province"></select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <select class="form-control" id="supplierCity" placeholder="City" name="city"></select>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Supplier Modal -->
+<div class="modal fade" id="editSupplierModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Supplier</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="updateSupplier">
+          <input type="hidden" id="supplierEditId">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Company Name" id="editCompanyName">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Phone Number" id="editCompanyPhone">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" id="editSupplierProvince" placeholder="Province" name="province"></input>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input class="form-control" id="editSupplierCity" placeholder="City" name="city"></input>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Delete Modal-->
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="DeleteModal" aria-hidden="true">

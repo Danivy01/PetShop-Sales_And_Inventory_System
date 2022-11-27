@@ -78,6 +78,17 @@
                 },
                 stateSave: false,
             });
+
+            let supplierTable = $("#supplierTable").DataTable({
+                processing: true,
+                columnDefs: [],
+
+                scrollCollapse: false,
+                scroller: {
+                    loadingIndicator: true,
+                },
+                stateSave: false,
+            });
         });
 
         // Add Customer Logic
@@ -419,7 +430,7 @@
             let city = $("#editCity").val();
             let editIdEmp = $("#editIdEmp").val();
 
-            let pattern = /^[0-9]{11}$/;
+            let pattern = /^(09|\+639)\d{9}$/;
             let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
             if (firstname.trim() == "") {
@@ -560,7 +571,7 @@
             let province = $("#setprovince").val();
             let city = $("#setcity").val();
 
-            let pattern = /^[0-9]{11}$/;
+            let pattern = /^(09|\+639)\d{9}$/;
             let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
             if (firstname.trim() == "") {
@@ -677,6 +688,567 @@
             }
         })
 
+        // Accounts Page
+
+        $("#addUser").on("submit", function(e) {
+            e.preventDefault();
+
+            let selectUser = $("#selectUser").val();
+            let selectType = $("#selectType").val();
+            let userName = $("#userName").val();
+            let password = $("#password").val();
+
+            if (selectUser == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please select a user!',
+                })
+            } else if (selectType == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please select a type!',
+                })
+            } else if (userName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username cannot be blank!',
+                })
+            } else if (password.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Password cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        selectUser: selectUser,
+                        selectType: selectType,
+                        userName: userName,
+                        password: password,
+                        addUser: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'User Added Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        $(".editAdmin").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    editAdminModal: true
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        let user = JSON.parse(data);
+                        $("#adminFullName").val(user.fullName);
+                        $("#adminType").val(user.type);
+                        $("#adminEditUserName").val(user.username);
+                        $("#adminEditPassword").val(user.password);
+                        $("#editAdminId").val(user.id);
+                    }
+                }
+            })
+        })
+
+        $(".editUser").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    editUserModal: true
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        let user = JSON.parse(data);
+                        $("#userFullName").val(user.fullName);
+                        $("#userType").val(user.type);
+                        $("#editUserName").val(user.username);
+                        $("#editPassword").val(user.password);
+                        $("#editUserId").val(user.id);
+                    }
+                }
+            })
+        })
+
+        $("#updateAdmin").on("submit", function(e) {
+            e.preventDefault();
+
+            let editId = $("#editAdminId").val();
+            let editUserName = $("#adminEditUserName").val();
+            let editPassword = $("#adminEditPassword").val();
+
+            if (editUserName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username cannot be blank!',
+                })
+            } else if (editPassword.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Password cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        editId: editId,
+                        editUserName: editUserName,
+                        editPassword: editPassword,
+                        updateUser: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'User Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#updateUser").on("submit", function(e) {
+            e.preventDefault();
+
+            let editId = $("#editUserId").val();
+
+            if (editId == "" || editId == null) {
+                editId = $("#editAdminId").val();
+            }
+
+            let editUserName = $("#editUserName").val();
+            let editPassword = $("#editPassword").val();
+
+            if (editUserName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username cannot be blank!',
+                })
+            } else if (editPassword.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Password cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        editId: editId,
+                        editUserName: editUserName,
+                        editPassword: editPassword,
+                        updateUser: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'User Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        function deleteUser(id) {
+            Swal.fire({
+                title: 'Delete User?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "controllers/detailsController.php",
+                        method: "POST",
+                        data: {
+                            id: id,
+                            deleteUser: true
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Please wait...',
+                                imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                willOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data != false) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'User Deleted Successfully!',
+                                }).then((result) => {
+                                    location.reload();
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
+        // Supplier Page
+
+        $("#addSupplier").on("submit", function(e) {
+            e.preventDefault();
+
+            let companyName = $("#companyName").val();
+            let companyPhone = $("#companyPhone").val();
+            let supplierProvince = $("#supplierProvince option:selected").text();
+            let supplierCity = $("#supplierCity option:selected").text();
+
+            let pattern = /^(09|\+639)\d{9}$/;
+
+            if (companyName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company Name cannot be blank!',
+                })
+            } else if (companyPhone.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company Phone cannot be blank!',
+                })
+            } else if (!pattern.test(companyPhone)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else if (supplierProvince.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Province cannot be blank!',
+                })
+            } else if (supplierCity.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'City cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        companyName: companyName,
+                        companyPhone: companyPhone,
+                        supplierProvince: supplierProvince,
+                        supplierCity: supplierCity,
+                        addSupplier: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Supplier Added Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        $(".editSupplier").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    getSupplier: true
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        let supplier = JSON.parse(data);
+                        $("#supplierEditId").val(supplier.id);
+                        $("#editCompanyName").val(supplier.companyName);
+                        $("#editCompanyPhone").val(supplier.companyPhone);
+                        $("#editSupplierProvince").val(supplier.province);
+                        $("#editSupplierCity ").val(supplier.city);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                }
+            })
+        })
+
+        $("#updateSupplier").on("submit", function(e) {
+            e.preventDefault();
+
+            let supplierEditId = $("#supplierEditId").val();
+            let editCompanyName = $("#editCompanyName").val();
+            let editCompanyPhone = $("#editCompanyPhone").val();
+            let editSupplierProvince = $("#editSupplierProvince").val();
+            let editSupplierCity = $("#editSupplierCity").val();
+
+            let pattern = /^(09|\+639)\d{9}$/;
+
+            if (editCompanyName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company Name cannot be blank!',
+                })
+            } else if (editCompanyPhone.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company Phone cannot be blank!',
+                })
+            } else if (!pattern.test(editCompanyPhone)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Phone Number!',
+                })
+            } else if (editSupplierProvince.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Province cannot be blank!',
+                })
+            } else if (editSupplierCity.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'City cannot be blank!',
+                })
+            } else {
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        supplierEditId: supplierEditId,
+                        editCompanyName: editCompanyName,
+                        editCompanyPhone: editCompanyPhone,
+                        editSupplierProvince: editSupplierProvince,
+                        editSupplierCity: editSupplierCity,
+                        updateSupplier: true
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Supplier Updated Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        function deleteSupplier(id){
+            Swal.fire({
+                title: 'Delete Supplier?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "controllers/detailsController.php",
+                        method: "POST",
+                        data: {
+                            id: id,
+                            deleteSupplier: true
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Please wait...',
+                                imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                willOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data != false) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Supplier Deleted Successfully!',
+                                }).then((result) => {
+                                    location.reload();
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
     <?php else : ?>
 
         $("#loginForm").on("submit", function(e) {
@@ -769,19 +1341,21 @@
         var $ = new City();
         $.showProvinces("#province");
         $.showCities("#city");
+        $.showProvinces("#supplierProvince");
+        $.showCities("#supplierCity");
 
         // ------------------
         // additional methods 
         // -------------------
 
         // will return all provinces 
-        console.log($.getProvinces());
+        // console.log($.getProvinces());
 
         // will return all cities 
-        console.log($.getAllCities());
+        // console.log($.getAllCities());
 
         // will return all cities under specific province (e.g Batangas)
-        console.log($.getCities("Batangas"));
+        // console.log($.getCities("Batangas"));
 
     }
 

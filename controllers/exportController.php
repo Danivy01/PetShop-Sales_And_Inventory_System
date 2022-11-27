@@ -20,6 +20,10 @@ if (isset($_GET['export']))
     {
         $name = "Employee Data";
     }
+    else if ($type == "supplierExcel")
+    {
+        $name = "Supplier Data";
+    }
 
     $exportData = $export->export($type);
 

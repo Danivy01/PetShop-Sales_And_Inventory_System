@@ -28,7 +28,7 @@
                         <div class="col mr-0">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Supplier</div>
                             <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                Record(s)
+                              <?php echo $supplierCount; ?> Record(s)
                             </div>
                         </div>
                         <div class="col-auto">

@@ -34,6 +34,9 @@ if (isset($_SESSION['userId']))
     $empCount = $details->employeeCount();
     $customerCount = $details->customerCount();
     $userCount = $details->userCount();
+    $supplierCount = $details->supplierCount();
+
+    $noAccounts = $details->getUserNoAccounts();
 
     // Table Data
 
@@ -50,12 +53,18 @@ if (isset($_SESSION['userId']))
         {
             $employeeTable = $details->employeeTable();
         }
+
+        if ($_GET['page'] == 5)
+        {
+            $supplierTable = $details->supplierTable();
+        }
         
         // Accounts Table
         if ($_GET['page'] == 7)
         {
             $adminTable = $details->accountsTable()['admin'];
             $userTable = $details->accountsTable()['users'];
+            $accessFields = $details->getAccessType();
         }
 
         if ($_GET['page'] == 8)

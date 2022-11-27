@@ -40,8 +40,8 @@
                 <div class="col-sm-9">
                     <select class='form-control' id='setgender'>
                         <option value="" disabled selected hidden>Select Gender</option>
-                        <option value="Male" <?php if ($settings[2] == 0) echo "selected"; ?>>Male</option>
-                        <option value="Female" <?php if ($settings[2] == 1) echo "selected"; ?>>Female</option>
+                        <option value="0" <?php if ($settings[2] == 0) echo "selected"; ?>>Male</option>
+                        <option value="1" <?php if ($settings[2] == 1) echo "selected"; ?>>Female</option>
                     </select>
                 </div>
             </div>

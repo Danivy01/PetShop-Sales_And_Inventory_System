@@ -15,6 +15,11 @@ class Database
     return $pdo;
   }
 
+  protected function randomString()
+  {
+    return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10 / strlen($x)))), 1, 10);
+  }
+
   protected function checkUserName($data) // Check if username is valid
   {
     $sql = "SELECT * FROM users WHERE userName = :user";
@@ -38,7 +43,7 @@ class Database
     // Type = 0 -> Used to Login the User
     // Type = 1 -> Get User Data
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 4)
     {
       $user = [];
 
@@ -48,9 +53,13 @@ class Database
     {
       $sql = "SELECT COUNT(*) AS countUsers FROM users";
     }
-    else if ($type == 3)
+    else if ($type == 3 OR $type == 5)
     {
-      $sql = "UPDATE users SET userName = :user, password = :pass WHERE randomId = :randomId";
+      $sql = "UPDATE users SET userName = :user, password = :pass";
+    }
+    else if ($type == 6)
+    {
+      $sql = "DELETE FROM users WHERE userId = :id";
     }
     
     if ($type == 0)
@@ -60,6 +69,18 @@ class Database
     else if ($type == 1)
     {
       $sql .= " WHERE randomId = :randomId";
+    }
+    else if ($type == 3)
+    {
+      $sql .= "  WHERE randomId = :randomId";
+    }
+    else if ($type == 4)
+    {
+      $sql .= " WHERE userId = :userId";
+    }
+    else if ($type == 5)
+    {
+      $sql .= " WHERE userId = :userId";
     }
 
     $stmt = $this->connect()->prepare($sql);
@@ -80,8 +101,20 @@ class Database
     {
       $stmt->execute(['user' => $data['user'], 'pass' => $data['password'], 'randomId' => $data['randomId']]);
     }
+    else if ($type == 4)
+    {
+      $stmt->execute(['userId' => $data['userId']]);
+    }
+    else if ($type == 5)
+    {
+      $stmt->execute(['user' => $data['user'], 'pass' => $data['password'], 'userId' => $data['userId']]);
+    }
+    else if ($type == 6)
+    {
+      $stmt->execute(['id' => $data['id']]);
+    }
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 4)
     {
       while ($row = $stmt->fetch()) 
       {
@@ -96,7 +129,7 @@ class Database
 
       return $row['countUsers'];
     }
-    else if ($type == 3)
+    else if ($type == 3 OR $type == 5 OR $type == 6)
     {
       return $stmt->rowCount() > 0 ? true : false;
     }
@@ -205,8 +238,15 @@ class Database
         'id'            => $data['id']
       ]);
     }
+    else if ($type == 6)
+    {
+      $sql = "SELECT id, CONCAT(firstName, ' ', middleName, ' ', lastName) AS fullName
+              FROM employeedetails WHERE id NOT IN (SELECT userId FROM users)";
+      $stmt = $this->connect()->prepare($sql);
+      $stmt->execute();
+    }
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 6)
     {
       while ($row = $stmt->fetch()) 
       {
@@ -215,7 +255,7 @@ class Database
 
       return $values;
     }
-    else if ($type != 4)
+    else if ($type == 2 OR $type == 3)
     {
       return $stmt->rowCount() > 0 ? true : false;
     }
@@ -227,20 +267,45 @@ class Database
     }
   }
 
-  protected function userTable() // Query to get the user's table
+  protected function userTable($type = 0, $data = []) // Query to get the user's table
   {
-    $data = [];
+    $values = [];
 
-    $sql = "SELECT * FROM users";
-    $stmt = $this->connect()->prepare($sql);
-    $stmt->execute();
-
-    while ($row = $stmt->fetch()) 
+    if ($type == 0)
     {
-      $data[] = $row;
+      $sql = "SELECT * FROM users";
     }
+    else if ($type == 1)
+    {
+      $sql = "INSERT INTO users (randomId, userName, password, typeId, userId)
+              VALUES (:randomId, :userName, :password, :typeId, :userId)";
+    }
+    
+    $stmt = $this->connect()->prepare($sql);
 
-    return $data;
+    if ($type == 0)
+    {
+      $stmt->execute();
+
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute([
+        'randomId'  => $this->randomString(),
+        'userName'  => $data['userName'],
+        'password'  => $data['password'],
+        'typeId'    => $data['typeId'],
+        'userId'    => $data['userId']
+      ]);
+
+      return $stmt->rowCount() > 0 ? true : false;
+    }
   }
 
   protected function position($posId, $type) // Query to get the user's position
@@ -275,11 +340,26 @@ class Database
     }
   }
 
-  protected function accessFields($typeId) // Query to get the user's access fields
+  protected function accessFields($typeId = "", $type = 0) // Query to get the user's access fields
   {
-    $sql = "SELECT type, accessType FROM type WHERE id = :typeId";
+    $sql = "SELECT id, type, accessType FROM type";
+
+    if ($type == 0)
+    {
+      $sql .= " WHERE id = :typeId";
+    }
+
     $stmt = $this->connect()->prepare($sql);
-    $stmt->execute(['typeId' => $typeId]);
+
+    if ($type == 0)
+    {
+      $stmt->execute(['typeId' => $typeId]);
+
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute();
+    }
 
     return $stmt->fetchAll();
   }
@@ -356,6 +436,86 @@ class Database
     else if ($type == 3)
     {
       return $stmt->fetch()['customerCount'];
+    }
+  }
+
+  protected function supplierDetails($type = 0, $data = [])
+  {
+    if ($type == 0 OR $type == 2)
+    {
+      $sql = "SELECT * FROM supplier";
+
+      if ($type == 2)
+      {
+        $sql .= " WHERE supplier_id = :id";
+      }
+    }
+    else if ($type == 1)
+    {
+      $sql = "INSERT INTO supplier (companyName, province, city, phoneNumber)
+              VALUES (:companyName, :province, :city, :phoneNumber)";
+    }
+    else if ($type == 3)
+    {
+      $sql = "UPDATE supplier SET companyName = :companyName, province = :province, city = :city, phoneNumber = :phoneNumber WHERE supplier_id = :id";
+    }
+    else if ($type == 4)
+    {
+      $sql = "SELECT COUNT(*) AS supplierCount FROM supplier";
+    }
+    else if ($type == 5)
+    {
+      $sql = "DELETE FROM supplier WHERE supplier_id = :id";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0 OR $type == 4)
+    {
+      $stmt->execute();
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute([
+        'companyName' => $data['companyName'],
+        'province'    => $data['province'],
+        'city'        => $data['city'],
+        'phoneNumber' => $data['phoneNumber']
+      ]);
+    }
+    else if ($type == 2 OR $type == 5)
+    {
+      $stmt->execute(['id' => $data['id']]);
+    }
+    else if ($type == 3)
+    {
+      $stmt->execute([
+        'companyName' => $data['companyName'],
+        'province'    => $data['province'],
+        'city'        => $data['city'],
+        'phoneNumber' => $data['phoneNumber'],
+        'id'          => $data['id']
+      ]);
+    }
+
+    if ($type == 0 OR $type == 2)
+    {
+      $values = [];
+
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else if ($type == 1 OR $type == 3 OR $type == 5)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 4)
+    {
+      return $stmt->fetch()['supplierCount'];
     }
   }
 }

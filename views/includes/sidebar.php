@@ -71,13 +71,13 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=3">
+        <a class="nav-link" href="?page=4">
           <i class="fas fa-fw fa-table"></i>
           <span>Product</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=4">
+        <a class="nav-link" href="?page=3">
           <i class="fas fa-fw fa-archive"></i>
           <span>Inventory</span></a>
       </li>
@@ -85,7 +85,7 @@
       <?php endif; ?>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=5">
+        <a class="nav-link" href="?page=6">
           <i class="fas fa-fw fa-retweet"></i>
           <span>Transaction</span></a>
       </li>
@@ -93,7 +93,7 @@
       <?php if ($accessType == "All"): ?>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=6">
+        <a class="nav-link" href="?page=5">
           <i class="fas fa-fw fa-cogs"></i>
           <span>Supplier</span></a>
       </li>
