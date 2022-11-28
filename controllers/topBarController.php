@@ -38,6 +38,11 @@ if (isset($_SESSION['userId']))
 
     $noAccounts = $details->getUserNoAccounts();
 
+    $category = $details->getCategory();
+    $productCode = $category[0];
+    $selectCategory = $category[1];
+    $selectSupplier = $category[2];
+
     // Table Data
 
     if (isset($_GET['page'])) 
@@ -52,6 +57,12 @@ if (isset($_SESSION['userId']))
         if ($_GET['page'] == 2)
         {
             $employeeTable = $details->employeeTable();
+        }
+
+        // Product
+        if ($_GET['page'] == 4)
+        {
+            $productTable = $details->productTable();
         }
 
         if ($_GET['page'] == 5)

@@ -480,4 +480,60 @@ class Details extends Database
     {
         return $this->supplierDetails(4);
     }
+
+    public function getCategory()
+    {
+        $productCode = $this->randomString();
+        $category = $this->categoryDB();
+        $supplier = $this->supplierDetails();
+
+        return [$productCode, $category, $supplier];
+    }
+
+    public function productTable()
+    {
+        $table = "";
+
+        $productDetails = $this->productDB();
+
+        if (count($productDetails) > 0)
+        {
+            foreach ($productDetails AS $products)
+            {
+                $category = $this->categoryDB(1, array("id" => $products['category_id']));
+                $supplier = $this->supplierDetails(2, array("id" => $products['supplier_id']));
+
+                $table .= "<tr>";
+                $table .= "<td>" . $products['productCode'] . "</td>";
+                $table .= "<td>" . $products['productName'] . "</td>";
+                $table .= "<td>" . $products['productDescription'] . "</td>";
+                $table .= "<td>" . $products['qtyStock'] . "</td>";
+                $table .= "<td>" . $products['onHand'] . "</td>";
+                $table .= "<td>" . $products['price'] . "</td>";
+                $table .= "<td>" . $category[0]['categoryName'] . "</td>";
+                $table .= "<td>" . $supplier[0]['companyName'] . "</td>";
+                $table .= "<td>
+                            <a href='#' data-toggle='modal' data-target='#editProductModal' data-id='" . $products['product_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editSupplier' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
+                            <a href='#' onclick='deleteProduct($products[product_id])' type='button' class='btn btn-danger bg-gradient-danger deleteProduct' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
+                        </td>";
+                $table .= "</tr>";
+            }
+        }
+        else
+        {
+            $table = "<tr><td colspan='9' class='text-center'>No Products Recorded</td></tr>";
+        }
+
+        return $table;
+    }
+
+    public function addCategory($data)
+    {
+        return $this->categoryDB(2, $data);
+    }
+
+    public function addProduct($data)
+    {
+        return $this->productDB(2, $data);
+    }
 }

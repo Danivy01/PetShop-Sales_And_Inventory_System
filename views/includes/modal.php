@@ -452,6 +452,112 @@
   </div>
 </div>
 
+<!-- Product Modal -->
+
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Product/Category</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="productForm">
+          <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs mb-3" role="tablist" style="gap: 2rem;">
+              <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab" id="categoryTab">Add Category</a>
+
+              </li>
+              <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab" id="productTab">Add Product</a>
+
+              </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active mr-5" id="uploadTab">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Category Name" id="categoryName">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" id="categoryStatus" placeholder="Status">
+                    <option value="" disabled hidden selected>Select Category Status</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="browseTab">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Product Code" id="productCode" value="<?php echo $productCode; ?>" readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Product Name" id="productName">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <select class="form-control" id="categorySelect" placeholder="Select Category">
+                    <option value="" disabled selected hidden>Select Category</option>
+                    <?php if (count($selectCategory) > 0) : ?>
+                      <?php foreach ($selectCategory as $key => $cat) : ?>
+                        <option value="<?php echo $cat['id']; ?>"><?php echo $cat['categoryName']; ?></option>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      <option value="" disabled selected hidden>No Category Available</option>
+                    <?php endif; ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <select class="form-control" id="supplierSelect" placeholder="Select Supplier">
+                    <option value="" disabled selected hidden>Select Supplier</option>
+                    <?php if (count($selectSupplier) > 0) : ?>
+                      <?php foreach ($selectSupplier as $key => $sup) : ?>
+                        <option value="<?php echo $sup['supplier_id']; ?>"><?php echo $sup['companyName']; ?></option>
+                      <?php endforeach; ?>
+                    <?php else : ?>
+                      <option value="" disabled selected hidden>No Supplier Available</option>
+                    <?php endif; ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" id="productDescription" placeholder="Product Description"></textarea>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="number" class="form-control" id="stock" min="1" placeholder="On Stock"></input>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="number" class="form-control" id="onHand" min="1" placeholder="On Hand"></input>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="number" class="form-control" id="price" min="1" placeholder="Price"></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Delete Modal-->
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="DeleteModal" aria-hidden="true">

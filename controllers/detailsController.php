@@ -191,3 +191,29 @@ if (isset($_POST['deleteSupplier']))
 
     echo $info->deleteSupplier($id);
 }
+
+if (isset($_POST['addCategory']))
+{
+    $data = array(
+        'categoryName'          => isset($_POST['categoryName']) ? $_POST['categoryName'] : '',
+        'status'                => isset($_POST['categoryStatus']) ? $_POST['categoryStatus'] : '',
+    );
+
+    echo $info->addCategory($data);
+}
+
+if (isset($_POST['addProduct']))
+{
+    $data = array(
+        'productCode'           => isset($_POST['productCode']) ? $_POST['productCode'] : '',
+        'productName'           => isset($_POST['productName']) ? $_POST['productName'] : '',
+        'productDescription'    => isset($_POST['productDescription']) ? $_POST['productDescription'] : '',
+        'stock'                 => isset($_POST['stock']) ? $_POST['stock'] : '',
+        'onHand'                => isset($_POST['onHand']) ? $_POST['onHand'] : '',
+        'price'                 => isset($_POST['price']) ? $_POST['price'] : '',
+        'category'              => isset($_POST['categorySelect']) ? $_POST['categorySelect'] : '',
+        'supplier'              => isset($_POST['supplierSelect']) ? $_POST['supplierSelect'] : '',
+    );
+
+    echo $info->addProduct($data);
+}

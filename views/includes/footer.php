@@ -89,6 +89,17 @@
                 },
                 stateSave: false,
             });
+
+            let productTable = $("#productTable").DataTable({
+                processing: true,
+                columnDefs: [],
+
+                scrollCollapse: false,
+                scroller: {
+                    loadingIndicator: true,
+                },
+                stateSave: false,
+            });
         });
 
         // Add Customer Logic
@@ -1197,7 +1208,7 @@
             }
         })
 
-        function deleteSupplier(id){
+        function deleteSupplier(id) {
             Swal.fire({
                 title: 'Delete Supplier?',
                 text: "You won't be able to revert this!",
@@ -1248,6 +1259,178 @@
                 }
             })
         }
+
+        let activeTab = "category";
+
+        $("#categoryTab").on("click", function() {
+            activeTab = "category";
+        })
+
+        $("#productTab").on("click", function() {
+            activeTab = "product";
+        })
+
+        $("#productForm").on("submit", function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+            let text = "";
+
+            if (activeTab == "category") {
+                let categoryName = $("#categoryName").val();
+                let categoryStatus = $("#categoryStatus").val();
+
+                text = "Category";
+
+                if (categoryName.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Category Name cannot be blank!',
+                    })
+
+                    return false;
+                } else if (categoryStatus.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Category Status cannot be blank!',
+                    })
+
+                    return false;
+                }
+
+                formData.append("categoryName", categoryName);
+                formData.append("categoryStatus", categoryStatus);
+                formData.append("addCategory", true);
+
+            } else if (activeTab == "product") {
+                let productCode = $("#productCode").val();
+                let productName = $("#productName").val();
+                let categorySelect = $("#categorySelect").val();
+                let productDescription = $("#productDescription").val();
+                let stock = $("#stock").val();
+                let onHand = $("#onHand").val();
+                let price = $("#price").val();
+                let supplierSelect = $("#supplierSelect").val();
+
+                text = "Product";
+
+                if (productCode.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Product Code cannot be blank!',
+                    })
+
+                    return false;
+                } else if (productName.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Product Name cannot be blank!',
+                    })
+
+                    return false;
+                } else if (categorySelect.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Category cannot be blank!',
+                    })
+
+                    return false;
+                } else if (productDescription.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Product Description cannot be blank!',
+                    })
+
+                    return false;
+                } else if (stock.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Stock cannot be blank!',
+                    })
+
+                    return false;
+                } else if (onHand.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'On Hand cannot be blank!',
+                    })
+
+                    return false;
+                } else if (price.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Price cannot be blank!',
+                    })
+
+                    return false;
+                } else if (supplierSelect.trim() == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Supplier cannot be blank!',
+                    })
+
+                    return false;
+                }
+
+                formData.append("productCode", productCode);
+                formData.append("productName", productName);
+                formData.append("categorySelect", categorySelect);
+                formData.append("productDescription", productDescription);
+                formData.append("stock", stock);
+                formData.append("onHand", onHand);
+                formData.append("price", price);
+                formData.append("supplierSelect", supplierSelect);
+                formData.append("addProduct", true);
+            }
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: text + ' Added Successfully!',
+                        }).then((result) => {
+                            location.reload();
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                }
+            })
+        })
+
 
     <?php else : ?>
 

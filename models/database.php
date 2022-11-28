@@ -518,4 +518,111 @@ class Database
       return $stmt->fetch()['supplierCount'];
     }
   }
+
+  protected function categoryDB($type = 0, $data = [])
+  {
+    $values = [];
+
+    if ($type == 0 OR $type == 1)
+    {
+      $sql = "SELECT * FROM category";
+
+      if ($type == 1)
+      {
+        $sql .= " WHERE id = :id";
+      }
+    }
+    else if ($type == 2)
+    {
+      $sql = "INSERT INTO category (categoryName, status) VALUES (:categoryName, :status)";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0)
+    {
+      $stmt->execute();
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute(['id' => $data['id']]);
+    }
+    else if ($type == 2)
+    {
+      $stmt->execute(['categoryName' => $data['categoryName'], 'status' => $data['status']]);
+    }
+
+    if ($type == 0 OR $type == 1)
+    {
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else if ($type == 2)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+  }
+
+  protected function productDB($type = 0, $data = [])
+  {
+    $values = [];
+
+    if ($type == 0 OR $type == 1)
+    {
+      $sql = "SELECT * FROM product";
+
+      if ($type == 1)
+      {
+        $sql .= " WHERE product_id = :id";
+      }
+    }
+    else if ($type == 2)
+    {
+      $sql = "INSERT INTO product (productCode, productName, productDescription, qtyStock, onHand, price, category_id, supplier_id, date_stock_in)
+              VALUES (:productCode, :productName, :productDescription, :qtyStock, :onHand, :price, :category_id, :supplier_id, :date_stock_in)";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0)
+    {
+      $stmt->execute();
+    }
+    else if ($type == 1)
+    {
+      $stmt->execute(['id' => $data['id']]);
+    }
+    else if ($type == 2)
+    {
+      $stmt->execute([
+        'productCode'        => $data['productCode'],
+        'productName'        => $data['productName'],
+        'productDescription' => $data['productDescription'],
+        'qtyStock'           => $data['stock'],
+        'onHand'             => $data['onHand'],
+        'price'              => $data['price'],
+        'category_id'        => $data['category'],
+        'supplier_id'        => $data['supplier'],
+        'date_stock_in'      => date('Y-m-d H:i:s')
+      ]);
+    }
+
+    if ($type == 0 OR $type == 1)
+    {
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else if ($type == 2)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+  }
 }
