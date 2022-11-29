@@ -42,11 +42,28 @@ if (isset($_SESSION['userId']))
     $productCode = $category[0];
     $selectCategory = $category[1];
     $selectSupplier = $category[2];
+    
+    $categoryTable = $details->categoryTable();
+
+    // Recent Products
+    $recent = $details->recentProducts();
+    $productCount = $details->productCount();
+
+    // Transaction Count
+    $transactionCount = $details->transactionCount();
 
     // Table Data
 
     if (isset($_GET['page'])) 
     {
+        if ($accessType == "User")
+        {
+            if ($_GET['page'] != 6 AND $_GET['page'] != 8)
+            {
+                echo "<script>alert('You are not allowed to access this page!'); window.location.href='index.php';</script>";
+            }
+        }
+
         // Customer Table
         if ($_GET['page'] == 1)
         {
@@ -59,15 +76,28 @@ if (isset($_SESSION['userId']))
             $employeeTable = $details->employeeTable();
         }
 
+        // Inventory Table
+        if ($_GET['page'] == 3)
+        {
+            $inventoryTable = $details->inventoryTable();
+        }
+
         // Product
         if ($_GET['page'] == 4)
         {
             $productTable = $details->productTable();
         }
 
+        // Supplier Table
         if ($_GET['page'] == 5)
         {
             $supplierTable = $details->supplierTable();
+        }
+
+        // Transaction Table
+        if ($_GET['page'] == 6)
+        {
+            $transactionTable = $details->transactionTable();
         }
         
         // Accounts Table

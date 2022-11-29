@@ -100,6 +100,28 @@
                 },
                 stateSave: false,
             });
+
+            let inventoryTable = $("#inventoryTable").DataTable({
+                processing: true,
+                columnDefs: [],
+
+                scrollCollapse: false,
+                scroller: {
+                    loadingIndicator: true,
+                },
+                stateSave: false,
+            });
+
+            let transactionTable = $("#transactionTable").DataTable({
+                processing: true,
+                columnDefs: [],
+
+                scrollCollapse: false,
+                scroller: {
+                    loadingIndicator: true,
+                },
+                stateSave: false,
+            });
         });
 
         // Add Customer Logic
@@ -1430,6 +1452,154 @@
                 }
             })
         })
+
+        $("#changeStatus").on("click", function() {
+            let id = $(this).attr("data-id");
+            let text = $(this).text();
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    text: text,
+                    changeStatus: true
+                },
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Status Changed Successfully!',
+                        }).then((result) => {
+                            location.reload();
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                }
+            })
+        })
+
+        function deleteCategory(id) {
+            Swal.fire({
+                title: 'Delete Category?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "controllers/detailsController.php",
+                        method: "POST",
+                        data: {
+                            id: id,
+                            deleteCategory: true
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Please wait...',
+                                imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                willOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data != false) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Category Deleted Successfully!',
+                                }).then((result) => {
+                                    location.reload();
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
+        function deleteProduct(id) {
+            Swal.fire({
+                title: 'Delete product?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "controllers/detailsController.php",
+                        method: "POST",
+                        data: {
+                            deleteProduct: true,
+                            id: id
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Please wait...',
+                                imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                willOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data != false) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Product Deleted Successfully!',
+                                }).then((result) => {
+                                    location.reload();
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!',
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        }
 
 
     <?php else : ?>

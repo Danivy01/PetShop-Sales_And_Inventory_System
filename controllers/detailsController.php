@@ -202,6 +202,25 @@ if (isset($_POST['addCategory']))
     echo $info->addCategory($data);
 }
 
+if (isset($_POST['deleteCategory']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+}
+
+if (isset($_POST['changeStatus']))
+{
+    $text = isset($_POST['text']) ? $_POST['text'] : '';
+
+    $status = ($text == "Active") ? 0 : 1;
+
+    $data = array(
+        'id'           => isset($_POST['id']) ? $_POST['id'] : '',
+        'status'       => $status,
+    );
+
+    echo $info->changeCategoryStatus($data);
+}
+
 if (isset($_POST['addProduct']))
 {
     $data = array(
@@ -216,4 +235,11 @@ if (isset($_POST['addProduct']))
     );
 
     echo $info->addProduct($data);
+}
+
+if (isset($_POST['deleteProduct']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->deleteProduct($id);
 }

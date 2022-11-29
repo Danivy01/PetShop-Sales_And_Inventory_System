@@ -24,6 +24,18 @@ if (isset($_GET['export']))
     {
         $name = "Supplier Data";
     }
+    else if ($type == "productExcel")
+    {
+        $name = "Product Data";
+    }
+    else if ($type == "inventoryExcel")
+    {
+        $name = "Inventory Data";
+    }
+    else if ($type == "transactionExcel")
+    {
+        $name = "Transaction Data";
+    }
 
     $exportData = $export->export($type);
 

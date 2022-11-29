@@ -299,6 +299,91 @@ class Details extends Database
                 $table .= "</tr>";
             }
         }
+        else if ($type == "productExcel")
+        {
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='8'>List of Products for " . date("F j, Y") . "</th>";
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Product Code</th>";
+            $table .= "<th>Product Name</th>";
+            $table .= "<th>Product Description</th>";
+            $table .= "<th>Quantity on Stock</th>";
+            $table .= "<th>Quantity on Hand</th>";
+            $table .= "<th>Product Price</th>";
+            $table .= "<th>Category</th>";
+            $table .= "<th>Supplier Name</th>";
+            $table .= "</tr>";
+
+            $productDetails = $this->productDB();
+
+            if (count($productDetails) > 0)
+            {
+                foreach ($productDetails AS $products)
+                {
+                    $category = $this->categoryDB(1, array("id" => $products['category_id']));
+                    $supplier = $this->supplierDetails(2, array("id" => $products['supplier_id']));
+
+                    $table .= "<tr>";
+                    $table .= "<td class='text-center'>" . $products['productCode'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['productName'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['productDescription'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['qtyStock'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['onHand'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['price'] . "</td>";
+                    $table .= "<td class='text-center'>" . $category[0]['categoryName'] . "</td>";
+                    $table .= "<td class='text-center'>" . $supplier[0]['companyName'] . "</td>";
+                    $table .= "</tr>";
+                }
+            }
+            else
+            {
+                $table = "<tr><td colspan='8' class='text-center'>No Products Recorded</td></tr>";
+            }
+        }
+        else if ($type == "inventoryExcel")
+        {
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='6'>List of Inventory for " . date("F j, Y") . "</th>";
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Product Code</th>";
+            $table .= "<th>Product Name</th>";
+            $table .= "<th>Quantity on Stock</th>";
+            $table .= "<th>Quantity on Hand</th>";
+            $table .= "<th>Category</th>";
+            $table .= "<th>Date Stock In</th>";
+            $table .= "</tr>";
+
+            $productDetails = $this->productDB();
+
+            if (count($productDetails) > 0)
+            {
+                foreach ($productDetails AS $products)
+                {
+                    $category = $this->categoryDB(1, array("id" => $products['category_id']));
+
+                    $table .= "<tr>";
+                    $table .= "<td class='text-center'>" . $products['productCode'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['productName'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['qtyStock'] . "</td>";
+                    $table .= "<td class='text-center'>" . $products['onHand'] . "</td>";
+                    $table .= "<td class='text-center'>" . $category[0]['categoryName'] . "</td>";
+                    $table .= "<td class='text-center'>" . date("F j, Y g:i A", strtotime($products['date_stock_in'])) . "</td>";
+                    $table .= "</tr>";
+                }
+            }
+            else
+            {
+                $table = "<tr><td colspan='6' class='text-center'>No Inventory Recorded</td></tr>";
+            }
+        }
+        else if ($type == "transactionExcel")
+        {
+
+        }
 
         return $table;
     }
@@ -504,15 +589,15 @@ class Details extends Database
                 $supplier = $this->supplierDetails(2, array("id" => $products['supplier_id']));
 
                 $table .= "<tr>";
-                $table .= "<td>" . $products['productCode'] . "</td>";
-                $table .= "<td>" . $products['productName'] . "</td>";
-                $table .= "<td>" . $products['productDescription'] . "</td>";
-                $table .= "<td>" . $products['qtyStock'] . "</td>";
-                $table .= "<td>" . $products['onHand'] . "</td>";
-                $table .= "<td>" . $products['price'] . "</td>";
-                $table .= "<td>" . $category[0]['categoryName'] . "</td>";
-                $table .= "<td>" . $supplier[0]['companyName'] . "</td>";
-                $table .= "<td>
+                $table .= "<td class='text-center'>" . $products['productCode'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['productName'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['productDescription'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['qtyStock'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['onHand'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['price'] . "</td>";
+                $table .= "<td class='text-center'>" . $category[0]['categoryName'] . "</td>";
+                $table .= "<td class='text-center'>" . $supplier[0]['companyName'] . "</td>";
+                $table .= "<td class='text-center'>
                             <a href='#' data-toggle='modal' data-target='#editProductModal' data-id='" . $products['product_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editSupplier' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
                             <a href='#' onclick='deleteProduct($products[product_id])' type='button' class='btn btn-danger bg-gradient-danger deleteProduct' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
                         </td>";
@@ -532,8 +617,147 @@ class Details extends Database
         return $this->categoryDB(2, $data);
     }
 
+    public function changeCategoryStatus($data)
+    {
+        return $this->categoryDB(3, $data);
+    }
+
+    public function deleteCategory($id)
+    {
+        return $this->categoryDB(4, array("id" => $id));
+    }
+
     public function addProduct($data)
     {
         return $this->productDB(2, $data);
+    }
+
+    public function deleteProduct($id)
+    {
+        return $this->productDB(4, array("id" => $id));
+    }
+
+    public function productCount()
+    {
+        return $this->productDB(5);
+    }
+
+    public function recentProducts()
+    {
+        $list = "";
+        $productDetails = $this->productDB(3);
+
+        if (count($productDetails) > 0)
+        {
+            foreach ($productDetails AS $product)
+            {
+                $list .= "<a href='#' class='list-group-item text-gray-800'>
+                            <i class='fa fa-tasks fa-fw'></i> $product[productCode] - $product[productName]
+                        </a>";
+            }
+        }
+
+        return $list;
+    }
+
+    public function categoryTable()
+    {
+        $table = "";
+        $categories = $this->categoryDB();
+
+        $count = 0;
+        if (count($categories) > 0)
+        {
+            foreach ($categories AS $category)
+            {
+                $count++;
+                $status = ($category['status'] == 1) ? "Active" : "Inactive";
+                $table .= "<tr>";
+                $table .= "<td class='text-center'>$count</td>";
+                $table .= "<td class='text-center'>$category[categoryName]</td>";
+                $table .= "<td class='text-center'>$status</td>";
+                $table .= "<td class='text-center'>
+                            <button type='button' class='btn btn-primary bg-gradient-primary' style='border-radius: 0px;' data-id='$category[id]' id='changeStatus'>$status</button>
+                            <a href='#' onclick='deleteCategory($category[id])' type='button' class='btn btn-danger bg-gradient-danger deleteCategory' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
+                        </td>";
+                $table .= "</tr>";
+            }
+        }
+        else
+        {
+            $table = "<tr><td colspan='4' class='text-center'>No Categories Recorded</td></tr>";
+        }
+
+        return $table;
+    }
+
+    public function inventoryTable()
+    {
+        $table = "";
+
+        $productDetails = $this->productDB();
+
+        if (count($productDetails) > 0)
+        {
+            foreach ($productDetails AS $products)
+            {
+                $category = $this->categoryDB(1, array("id" => $products['category_id']));
+
+                $table .= "<tr>";
+                $table .= "<td class='text-center'>" . $products['productCode'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['productName'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['qtyStock'] . "</td>";
+                $table .= "<td class='text-center'>" . $products['onHand'] . "</td>";
+                $table .= "<td class='text-center'>" . $category[0]['categoryName'] . "</td>";
+                $table .= "<td class='text-center'>" . date("F j, Y g:i A", strtotime($products['date_stock_in'])) . "</td>";
+                $table .= "</tr>";
+            }
+        }
+        else
+        {
+            $table = "<tr><td colspan='7' class='text-center'>No Inventory Recorded</td></tr>";
+        }
+
+        return $table;
+    }
+
+    public function transactionTable()
+    {
+        $table = "";
+
+        $transaction = $this->transactionDB();
+
+        if (count($transaction) > 0)
+        {
+            foreach ($transaction AS $transact)
+            {
+                $id = $transact['id'];
+                $customerId = $transact['customerId'];
+                $customer = $this->customerDetails(0, array("id" => $customerId));
+                $customerName = $customer[0]['firstName'] . " " . $customer[0]['lastName'];
+                $transactionCount = $this->transactionDB(3, array("id" => $id));
+
+                $table .= "<tr>";
+                $table .= "<td class='text-center'>" . $transact['transactionNumber'] . "</td>";
+                $table .= "<td class='text-center'>" . $customerName . "</td>";
+                $table .= "<td class='text-center'>" . $transactionCount . "</td>";
+                $table .= "<td class='text-center'>" . date("F j, Y g:i A", strtotime($transact['transactionDate'])) . "</td>";
+                $table .= "<td class='text-center'>
+                            <a href='#' data-toggle='modal' data-target='#viewTransactionDetails' data-id='" . $id . "' type='button' class='btn btn-primary bg-gradient-primary viewTransaction' style='border-radius: 0px;'><i class='fas fa-fw fa-eye'></i></a>
+                        </td>";
+                $table .= "</tr>";
+            }
+        }
+        else
+        {
+            $table = "<tr><td colspan='5' class='text-center'>No Transactions Recorded</td></tr>";
+        }
+
+        return $table;
+    }
+
+    public function transactionCount()
+    {
+        return $this->transactionDB(2);
     }
 }

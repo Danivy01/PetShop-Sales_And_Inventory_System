@@ -536,6 +536,14 @@ class Database
     {
       $sql = "INSERT INTO category (categoryName, status) VALUES (:categoryName, :status)";
     }
+    else if ($type == 3)
+    {
+      $sql = "UPDATE category SET status = :status WHERE id = :id";
+    }
+    else if ($type == 4)
+    {
+      $sql = "DELETE FROM category WHERE id = :id";
+    }
 
     $stmt = $this->connect()->prepare($sql);
 
@@ -543,13 +551,17 @@ class Database
     {
       $stmt->execute();
     }
-    else if ($type == 1)
+    else if ($type == 1 OR $type == 4)
     {
       $stmt->execute(['id' => $data['id']]);
     }
     else if ($type == 2)
     {
       $stmt->execute(['categoryName' => $data['categoryName'], 'status' => $data['status']]);
+    }
+    else if ($type == 3)
+    {
+      $stmt->execute(['status' => $data['status'], 'id' => $data['id']]);
     }
 
     if ($type == 0 OR $type == 1)
@@ -561,7 +573,7 @@ class Database
 
       return $values;
     }
-    else if ($type == 2)
+    else if ($type == 2 OR $type == 3 OR $type == 4)
     {
       return ($stmt->rowCount() > 0) ? true : false;
     }
@@ -571,7 +583,7 @@ class Database
   {
     $values = [];
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 3)
     {
       $sql = "SELECT * FROM product";
 
@@ -579,16 +591,28 @@ class Database
       {
         $sql .= " WHERE product_id = :id";
       }
+      else if ($type == 3)
+      {
+        $sql .= " ORDER BY product_id DESC LIMIT 5";
+      }
     }
     else if ($type == 2)
     {
       $sql = "INSERT INTO product (productCode, productName, productDescription, qtyStock, onHand, price, category_id, supplier_id, date_stock_in)
               VALUES (:productCode, :productName, :productDescription, :qtyStock, :onHand, :price, :category_id, :supplier_id, :date_stock_in)";
     }
+    else if ($type == 4)
+    {
+      $sql = "DELETE FROM product WHERE product_id = :id";
+    }
+    else if ($type == 5)
+    {
+      $sql = "SELECT COUNT(*) AS productCount FROM product";
+    }
 
     $stmt = $this->connect()->prepare($sql);
 
-    if ($type == 0)
+    if ($type == 0 OR $type == 3 OR $type == 4 OR $type == 5)
     {
       $stmt->execute();
     }
@@ -611,7 +635,7 @@ class Database
       ]);
     }
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 3)
     {
       while ($row = $stmt->fetch()) 
       {
@@ -623,6 +647,61 @@ class Database
     else if ($type == 2)
     {
       return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 4)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 5)
+    {
+      return $stmt->fetch()['productCount'];
+    }
+  }
+
+  protected function transactionDB($type = 0, $data = [])
+  {
+    if ($type == 0)
+    {
+      $sql = "SELECT * FROM transaction";
+    }
+    else if ($type == 1)
+    {
+      $sql = "SELECT * FROM transactiondetails WHERE transactionId = :id";
+    }
+    else if ($type == 2)
+    {
+      $sql = "SELECT COUNT(*) AS transactionCount FROM transaction";
+    }
+    else if ($type == 3)
+    {
+      $sql = "SELECT COUNT(*) AS transactionCount FROM transactiondetails WHERE transactionId = :id";
+    }
+
+    $stmt = $this->connect()->prepare($sql);
+
+    if ($type == 0 OR $type == 2)
+    {
+      $stmt->execute();
+    }
+    else if ($type == 1 OR $type == 3)
+    {
+      $stmt->execute(['id' => $data['id']]);
+    }
+
+    $values = [];
+
+    if ($type == 0 OR $type == 1)
+    {
+      while ($row = $stmt->fetch()) 
+      {
+        $values[] = $row;
+      }
+
+      return $values;
+    }
+    else if ($type == 2 OR $type == 3)
+    {
+      return $stmt->fetch()['transactionCount'];
     }
   }
 }
