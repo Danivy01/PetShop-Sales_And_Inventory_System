@@ -382,7 +382,95 @@ class Details extends Database
         }
         else if ($type == "transactionExcel")
         {
+            $finalTotal = 0;
 
+            $table .= "<table border=1>";
+            $table .= "<tr>";
+            $table .= "<th colspan='4'>List of Transactions for " . date("F j, Y") . "</th>";
+            $table .= "</tr>";
+
+            $transaction = $this->transactionDB();
+
+            if (count($transaction) > 0)
+            {
+                foreach ($transaction AS $transact)
+                {
+                    $table .= "<tr>";
+                    $table .= "<th>Transaction Code</th>";
+                    $table .= "<th>Customer Name</th>";
+                    $table .= "<th>Added By</th>";
+                    $table .= "<th>Transaction Date</th>";
+                    $table .= "</tr>";
+
+                    $customerId = $addedBy = 0;
+
+                    $id = $transact['id'];
+                    $transactionNumber = $transact['transactionNumber'];
+                    $transactionDate = date("F j, Y", strtotime($transact['transactionDate']));
+                    $customerId = $transact['customerId'];
+                    $addedBy = $transact['addedBy'];
+
+                    $customer = $this->customerDetails(0, array("id" => $customerId));
+                    $customerName = $customer[0]['firstName'] . " " . $customer[0]['lastName'];
+
+                    $employee = $this->employeeDetails($addedBy, 0);
+                    $employeeName = $employee[0]['firstName'] . " " . $employee[0]['lastName'];
+
+                    $table .= "<tr>";
+                    $table .= "<td class='text-center'>" . $transactionNumber . "</td>";
+                    $table .= "<td class='text-center'>" . $customerName . "</td>";
+                    $table .= "<td class='text-center'>" . $employeeName . "</td>";
+                    $table .= "<td class='text-center'>" . $transactionDate . "</td>";
+                    $table .= "</tr>";
+
+                    $transactionDetails = $this->transactionDB(1, array("id" => $id));
+                    $counter = 0;
+
+                    $table .= "<tr>";
+                    $table .= "<th colspan='4'>Transaction Details</th>";
+                    $table .= "</tr>";
+                    $table .= "<tr>";
+                    $table .= "<th>#</th>";
+                    $table .= "<th>Product Name</th>";
+                    $table .= "<th>Quantity</th>";
+                    $table .= "<th>Price</th>";
+                    $table .= "</tr>";
+
+                    foreach ($transactionDetails AS $transactDetails)
+                    {
+                        $counter++;
+                        $productId = $transactDetails['productId'];
+                        $quantity = $transactDetails['quantity'];
+                        $product = $this->productDB(1, array("id" => $productId));
+                        $productName = $product[0]['productName'];
+                        $price = $product[0]['price'];
+
+                        $table .= "<tr>";
+                        $table .= "<td class='text-center'>" . $counter . "</td>";
+                        $table .= "<td class='text-center'>" . $productName . "</td>";
+                        $table .= "<td class='text-center'>₱" . $quantity . "</td>";
+                        $table .= "<td class='text-center'>₱" . $price . "</td>";
+                        $table .= "</tr>";
+
+                        $finalTotal += ($quantity * $price);
+                    }
+
+                    $counter = 0;
+
+                    $table .= "<tr>";
+                    $table .= "<td colspan='3' class='text-center'>Total</td>";
+                    $table .= "<td class='text-center'>₱" . $finalTotal . "</td>";
+                    $table .= "</tr>";
+
+                    $finalTotal = 0;
+                }
+
+
+            }
+            else
+            {
+                $table = "<tr><td colspan='4' class='text-center'>No Transactions Recorded</td></tr>";
+            }
         }
 
         return $table;
@@ -598,7 +686,7 @@ class Details extends Database
                 $table .= "<td class='text-center'>" . $category[0]['categoryName'] . "</td>";
                 $table .= "<td class='text-center'>" . $supplier[0]['companyName'] . "</td>";
                 $table .= "<td class='text-center'>
-                            <a href='#' data-toggle='modal' data-target='#editProductModal' data-id='" . $products['product_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editSupplier' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
+                            <a href='#' data-toggle='modal' data-target='#editProductModal' data-id='" . $products['product_id'] . "' type='button' class='btn btn-primary bg-gradient-primary editProduct' style='border-radius: 0px;'><i class='fas fa-fw fa-edit'></i></a>
                             <a href='#' onclick='deleteProduct($products[product_id])' type='button' class='btn btn-danger bg-gradient-danger deleteProduct' style='border-radius: 0px;'><i class='fas fa-fw fa-trash'></i></a>
                         </td>";
                 $table .= "</tr>";
@@ -630,6 +718,30 @@ class Details extends Database
     public function addProduct($data)
     {
         return $this->productDB(2, $data);
+    }
+
+    public function getProductModal($id)
+    {
+        $productModal = $this->productDB(1, array("id" => $id));
+
+        return json_encode(
+            [
+                'productCode' => $productModal[0]['productCode'],
+                'productName' => $productModal[0]['productName'],
+                'productDescription' => $productModal[0]['productDescription'],
+                'qtyStock' => $productModal[0]['qtyStock'],
+                'onHand' => $productModal[0]['onHand'],
+                'price' => $productModal[0]['price'],
+                'category' => $productModal[0]['category_id'],
+                'supplier' => $productModal[0]['supplier_id'],
+                'id' => $id,
+            ]
+        );
+    }
+
+    public function editProduct($data)
+    {
+        return $this->productDB(6, $data);
     }
 
     public function deleteProduct($id)
@@ -759,5 +871,111 @@ class Details extends Database
     public function transactionCount()
     {
         return $this->transactionDB(2);
+    }
+
+    public function getCustomer()
+    {
+        return $this->customerDetails();
+    }
+
+    public function getTransactionNumber()
+    {
+        return $this->transactionNumber();
+    }
+
+    public function getProducts()
+    {
+        $productDetails = $this->productDB();
+
+        return json_encode($productDetails);
+    }
+
+    public function addTransaction($data)
+    {
+        $transactionNumber = $data['transactionNumber'];
+        $transactionDate = $data['transactionDate'];
+        $customerId = $data['customerTransaction'];
+        $productId = $data['productTransaction'];
+        $quantity = $data['quantity'];
+        $userId = $data['userId'];
+
+        if ($this->transactionDB(4, array('transactionNumber' => $transactionNumber, 'transactionDate' => $transactionDate, 'customerId' => $customerId, 'addedBy' => $userId)))
+        {
+            $lastId = $this->transactionDB(6);
+
+            for ($i = 0; $i < count($productId); $i++)
+            {
+                $this->transactionDB(5, array('transactionId' => $lastId, 'productId' => $productId[$i], 'qty' => $quantity[$i]));
+            }
+
+            return $lastId;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function transactionModal($id)
+    {
+        $table = "";
+
+        $transaction = $this->transactionDB(7, array("id" => $id));
+
+        $transactionNumber = $transaction[0]['transactionNumber'];
+        $transactionDate = date("F j, Y", strtotime($transaction[0]['transactionDate']));
+        $customerId = $transaction[0]['customerId'];
+        $addedBy = $transaction[0]['addedBy'];
+
+        $customer = $this->customerDetails(0, array("id" => $customerId));
+        $customerName = $customer[0]['firstName'] . " " . $customer[0]['lastName'];
+
+        $employee = $this->employeeDetails($addedBy, 0);
+        $employeeName = $employee[0]['firstName'] . " " . $employee[0]['lastName'];
+
+        $transactionDetails = $this->transactionDB(1, array("id" => $id));
+
+        $finalTotal = 0;
+
+        $count = 0;
+        foreach ($transactionDetails AS $transact)
+        {
+            $count++;
+            $productId = $transact['productId'];
+            $quantity = $transact['quantity'];
+            $product = $this->productDB(1, array("id" => $productId));
+            $productName = $product[0]['productName'];
+            $price = $product[0]['price'];
+
+            $table .= "<tr>";
+            $table .= "<td class='text-center'>" . $count . "</td>";
+            $table .= "<td class='text-center'>" . $productName . "</td>";
+            $table .= "<td class='text-center'>" . $quantity . "</td>";
+            $table .= "<td class='text-center'>₱" . $price . "</td>";
+            $table .= "<td class='text-center'>₱" . number_format(($quantity * $price), 2) . "</td>";
+            $table .= "</tr>";
+
+            $finalTotal += ($quantity * $price);
+        }
+
+        $table .= "<tr>";
+        $table .= "<td colspan='4' class='text-right'><strong>Total</strong></td>";
+        $table .= "<td class='text-center'><strong>₱" . number_format($finalTotal, 2) . "</strong></td>";
+        $table .= "</tr>";
+
+        $table .= "<tr>";
+        $table .= "<td colspan='4' class='text-center'><strong>Transaction Number: " . $transactionNumber . "</strong></td>";
+        $table .= "<td class='text-center'><strong>Transaction Date: " . $transactionDate . "</strong></td>";
+        $table .= "</tr>";
+
+        $table .= "<tr>";
+        $table .= "<td colspan='4' class='text-center'><strong>Customer: " . $customerName . "</strong></td>";
+        $table .= "<td class='text-center'><strong>Added By: " . $employeeName . "</strong></td>";
+        $table .= "</tr>";
+
+        return json_encode([
+            "transactionTable" => $table, 
+            "addedBy" => $addedBy
+        ]);
     }
 }

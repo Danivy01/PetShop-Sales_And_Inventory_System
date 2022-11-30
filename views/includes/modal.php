@@ -559,6 +559,85 @@
   </div>
 </div>
 
+<!-- Edit Product -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="editProductForm">
+          <input type="hidden" id="editProductId">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Product Code" id="editProductCode" readonly>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Product Name" id="editProductName">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="editCategorySelect" placeholder="Select Category">
+              <option value="" disabled selected hidden>Select Category</option>
+              <?php if (count($selectCategory) > 0) : ?>
+                <?php foreach ($selectCategory as $key => $cat) : ?>
+                  <option value="<?php echo $cat['id']; ?>"><?php echo $cat['categoryName']; ?></option>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <option value="" disabled selected hidden>No Category Available</option>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="editSupplierSelect" placeholder="Select Supplier">
+              <option value="" disabled selected hidden>Select Supplier</option>
+              <?php if (count($selectSupplier) > 0) : ?>
+                <?php foreach ($selectSupplier as $key => $sup) : ?>
+                  <option value="<?php echo $sup['supplier_id']; ?>"><?php echo $sup['companyName']; ?></option>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <option value="" disabled selected hidden>No Supplier Available</option>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" id="editProductDescription" placeholder="Product Description"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="number" class="form-control" id="editStock" min="1" placeholder="On Stock"></input>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="number" class="form-control" id="editOnHand" min="1" placeholder="On Hand"></input>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="number" class="form-control" id="editPrice" min="1" placeholder="Price"></input>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Category Modal -->
 <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="CategoryModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -583,6 +662,93 @@
             <?php echo $categoryTable; ?>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Transaction Modal -->
+<div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Transaction</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="addTransaction">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Transaction Number" id="transactionNumber" value="<?php echo $transactionNumber; ?>" readonly>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="date" class="form-control" placeholder="Transaction Date" id="transactionDate">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="customerTransaction" placeholder="Select Customer">
+              <option value="" disabled selected hidden>Select Customer</option>
+              <?php if (count($getCustomer) > 0) : ?>
+                <?php foreach ($getCustomer as $key => $cust) : ?>
+                  <option value="<?php echo $cust['id']; ?>"><?php echo $cust['firstName'] . " " . $cust['lastName']; ?></option>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <option value="" disabled selected hidden>No Customer Available</option>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <button type="button" class="btn btn-success" id="addProductTransaction"><i class="fa fa-plus fa-fw"></i>Add Products</button>
+            </div>
+            <!-- Div for appending products -->
+            <div class="col-md-12" id="productTransaction">
+            </div>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-success"><i class="fa fa-check fa-fw"></i>Save</button>
+          <button type="reset" class="btn btn-danger"><i class="fa fa-times fa-fw"></i>Reset</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Transaction Modal -->
+<div class="modal fade" id="viewTransactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">View Transaction</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Product Name</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-center">Price</th>
+                  <th class="text-center">Sub Total</th>
+                </tr>
+              </thead>
+              <tbody id="transactionBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <hr>
       </div>
     </div>
   </div>

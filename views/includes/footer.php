@@ -1282,6 +1282,8 @@
             })
         }
 
+        // Product and Category Page
+
         let activeTab = "category";
 
         $("#categoryTab").on("click", function() {
@@ -1453,6 +1455,149 @@
             })
         })
 
+        $(".editProduct").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    getProductModal: true
+                },
+                success: function(data) {
+                    console.log(data);
+                    let product = JSON.parse(data);
+
+                    $("#editProductCode").val(product.productCode);
+                    $("#editProductName").val(product.productName);
+                    $("#editCategorySelect option[value='" + product.category + "']").attr("selected", true);
+                    $("#editProductDescription").val(product.productDescription);
+                    $("#editStock").val(product.qtyStock);
+                    $("#editOnHand").val(product.onHand);
+                    $("#editPrice").val(product.price);
+                    $("#editSupplierSelect option[value='" + product.supplier + "']").attr("selected", true);
+                    $("#editProductId").val(product.id);
+                }
+            })
+        })
+
+        $("#editProductForm").on("submit", function(e) {
+            e.preventDefault();
+
+            let productName = $("#editProductName").val();
+            let categorySelect = $("#editCategorySelect option:selected").val();
+            let productDescription = $("#editProductDescription").val();
+            let stock = $("#editStock").val();
+            let onHand = $("#editOnHand").val();
+            let price = $("#editPrice").val();
+            let supplierSelect = $("#editSupplierSelect option:selected").val();
+            let productId = $("#editProductId").val();
+
+            if (productName.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Product Name cannot be blank!',
+                })
+
+                return false;
+            } else if (categorySelect.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Category cannot be blank!',
+                })
+
+                return false;
+            } else if (productDescription.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Product Description cannot be blank!',
+                })
+
+                return false;
+            } else if (stock.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Stock cannot be blank!',
+                })
+
+                return false;
+            } else if (onHand.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'On Hand cannot be blank!',
+                })
+
+                return false;
+            } else if (price.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Price cannot be blank!',
+                })
+
+                return false;
+            } else if (supplierSelect.trim() == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Supplier cannot be blank!',
+                })
+
+                return false;
+            }
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    productName: productName,
+                    categorySelect: categorySelect,
+                    productDescription: productDescription,
+                    stock: stock,
+                    onHand: onHand,
+                    price: price,
+                    supplierSelect: supplierSelect,
+                    productId: productId,
+                    editProduct: true
+                },
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Product Updated Successfully!',
+                        }).then((result) => {
+                            location.reload();
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                }
+            })
+        })
+
         $("#changeStatus").on("click", function() {
             let id = $(this).attr("data-id");
             let text = $(this).text();
@@ -1600,6 +1745,133 @@
                 }
             })
         }
+
+        $("#addProductTransaction").on("click", function() {
+            // append select input and quantity to productTransaction div every time the button is clicked, also add a remove button
+            let productTransaction = $("#productTransaction");
+
+
+            let select = $("<select></select>").addClass("form-control").attr("name", "product[]");
+            let option = $("<option></option>").attr("value", "").text("Select Product");
+            select.append(option);
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    getProducts: true
+                },
+                success: function(data) {
+                    let products = JSON.parse(data);
+                    products.forEach(product => {
+                        let option = $("<option></option>").attr("value", product.product_id).text(product.productName);
+                        select.append(option);
+                    })
+                }
+            })
+
+            let quantity = $("<input></input>").addClass("form-control").attr("type", "number").attr("name", "quantity[]").attr("placeholder", "Quantity");
+            let remove = $("<button></button>").addClass("btn btn-danger mb-3").attr("type", "button").attr("id", "removeProductTransaction").text("Remove");
+
+            productTransaction.append(select);
+            productTransaction.append(quantity);
+            productTransaction.append(remove);
+        })
+
+        $("#productTransaction").on("click", "#removeProductTransaction", function() {
+            $(this).prev().remove();
+            $(this).prev().remove();
+            $(this).remove();
+        })
+
+        $("#addTransaction").on("submit", function(e) {
+            e.preventDefault();
+
+            let productArray = [];
+            let quantityArray = [];
+
+            let transactionNumber = $("#transactionNumber").val();
+            let transactionDate = $("#transactionDate").val();
+            let customerTransaction = $("#customerTransaction").val();
+            let product = $("select[name='product[]']").val();
+            let quantity = $("input[name='quantity[]']").val();
+
+            if (transactionDate == "" || customerTransaction == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill up all fields!',
+                })
+            } else {
+                $("select[name='product[]']").each(function() {
+                    productArray.push($(this).val());
+                })
+
+                $("input[name='quantity[]']").each(function() {
+                    quantityArray.push($(this).val());
+                })
+
+                $.ajax({
+                    url: "controllers/detailsController.php",
+                    method: "POST",
+                    data: {
+                        addTransaction: true,
+                        transactionNumber: transactionNumber,
+                        transactionDate: transactionDate,
+                        customerTransaction: customerTransaction,
+                        product: productArray,
+                        quantity: quantityArray
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            imageUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data != false) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Transaction Added Successfully!',
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        $(".viewTransaction").on("click", function() {
+            let id = $(this).attr("data-id");
+
+            $.ajax({
+                url: "controllers/detailsController.php",
+                method: "POST",
+                data: {
+                    viewTransaction: true,
+                    id: id
+                },
+                success: function(data) {
+                    let transaction = JSON.parse(data);
+                    console.log(transaction);
+                    $("#transactionBody").html(transaction.transactionTable);
+                }
+            })
+        })
 
 
     <?php else : ?>

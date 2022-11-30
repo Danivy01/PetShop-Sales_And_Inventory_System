@@ -20,6 +20,11 @@ class Database
     return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10 / strlen($x)))), 1, 10);
   }
 
+  protected function transactionNumber()
+  {
+    return substr(str_shuffle(str_repeat($x = '0123456789', ceil(10 / strlen($x)))), 1, 10);
+  }
+
   protected function checkUserName($data) // Check if username is valid
   {
     $sql = "SELECT * FROM users WHERE userName = :user";
@@ -425,11 +430,7 @@ class Database
 
       return $data;
     }
-    else if ($type == 1)
-    {
-      return ($stmt->rowCount() > 0) ? true : false;
-    }
-    else if ($type == 2)
+    else if ($type == 1 OR $type == 2)
     {
       return ($stmt->rowCount() > 0) ? true : false;
     }
@@ -609,6 +610,10 @@ class Database
     {
       $sql = "SELECT COUNT(*) AS productCount FROM product";
     }
+    else if ($type == 6)
+    {
+      $sql = "UPDATE product SET productName = :productName, productDescription = :productDescription, qtyStock = :qtyStock, onHand = :onHand, price = :price, category_id = :categoryId, supplier_id = :supplierId, date_stock_in = :dateStock WHERE product_id = :id";
+    }
 
     $stmt = $this->connect()->prepare($sql);
 
@@ -634,6 +639,20 @@ class Database
         'date_stock_in'      => date('Y-m-d H:i:s')
       ]);
     }
+    else if ($type == 6)
+    {
+      $stmt->execute([
+        'productName'        => $data['productName'],
+        'productDescription' => $data['productDescription'],
+        'qtyStock'           => $data['stock'],
+        'onHand'             => $data['onHand'],
+        'price'              => $data['price'],
+        'categoryId'         => $data['categoryId'],
+        'supplierId'         => $data['supplierId'],
+        'id'                 => $data['id'],
+        'dateStock'          => date('Y-m-d H:i:s')
+      ]);
+    }
 
     if ($type == 0 OR $type == 1 OR $type == 3)
     {
@@ -644,11 +663,7 @@ class Database
 
       return $values;
     }
-    else if ($type == 2)
-    {
-      return ($stmt->rowCount() > 0) ? true : false;
-    }
-    else if ($type == 4)
+    else if ($type == 2 OR $type == 4 OR $type == 6)
     {
       return ($stmt->rowCount() > 0) ? true : false;
     }
@@ -660,9 +675,14 @@ class Database
 
   protected function transactionDB($type = 0, $data = [])
   {
-    if ($type == 0)
+    if ($type == 0 OR $type == 7)
     {
       $sql = "SELECT * FROM transaction";
+
+      if ($type == 7)
+      {
+        $sql .= " WHERE id = :id";
+      }
     }
     else if ($type == 1)
     {
@@ -676,21 +696,50 @@ class Database
     {
       $sql = "SELECT COUNT(*) AS transactionCount FROM transactiondetails WHERE transactionId = :id";
     }
+    else if ($type == 4)
+    {
+      $sql = "INSERT INTO transaction (transactionNumber, transactionDate, customerId, addedBy) VALUES (:transactionNumber, :transactionDate, :customerId, :addedBy)";
+    }
+    else if ($type == 5)
+    {
+      $sql = "INSERT INTO transactiondetails (transactionId, productId, quantity) VALUES (:transactionId, :productId, :qty)";
+    }
+    else if ($type == 6)
+    {
+      $sql = "SELECT id FROM transaction ORDER BY id DESC LIMIT 1";
+    }
 
     $stmt = $this->connect()->prepare($sql);
 
-    if ($type == 0 OR $type == 2)
+    if ($type == 0 OR $type == 2 OR $type == 6)
     {
       $stmt->execute();
     }
-    else if ($type == 1 OR $type == 3)
+    else if ($type == 1 OR $type == 3 OR $type == 7)
     {
       $stmt->execute(['id' => $data['id']]);
+    }
+    else if ($type == 4)
+    {
+      $stmt->execute([
+        'transactionNumber' => $data['transactionNumber'],
+        'transactionDate'   => $data['transactionDate'],
+        'customerId'        => $data['customerId'],
+        'addedBy'           => $data['addedBy']
+      ]);
+    }
+    else if ($type == 5)
+    {
+      $stmt->execute([
+        'transactionId' => $data['transactionId'],
+        'productId'     => $data['productId'],
+        'qty'           => $data['qty']
+      ]);
     }
 
     $values = [];
 
-    if ($type == 0 OR $type == 1)
+    if ($type == 0 OR $type == 1 OR $type == 7)
     {
       while ($row = $stmt->fetch()) 
       {
@@ -702,6 +751,14 @@ class Database
     else if ($type == 2 OR $type == 3)
     {
       return $stmt->fetch()['transactionCount'];
+    }
+    else if ($type == 4 OR $type == 5)
+    {
+      return ($stmt->rowCount() > 0) ? true : false;
+    }
+    else if ($type == 6)
+    {
+      return $stmt->fetch()['id'];
     }
   }
 }

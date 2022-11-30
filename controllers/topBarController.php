@@ -52,6 +52,12 @@ if (isset($_SESSION['userId']))
     // Transaction Count
     $transactionCount = $details->transactionCount();
 
+    // Customer for Transaction Modal
+    $getCustomer = $details->getCustomer();
+
+    // Transaction Number
+    $transactionNumber = $details->getTransactionNumber();
+
     // Table Data
 
     if (isset($_GET['page'])) 

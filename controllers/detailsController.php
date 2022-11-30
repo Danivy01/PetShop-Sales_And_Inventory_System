@@ -237,9 +237,58 @@ if (isset($_POST['addProduct']))
     echo $info->addProduct($data);
 }
 
+if (isset($_POST['getProductModal']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->getProductModal($id);
+}
+
+if (isset($_POST['editProduct']))
+{
+    $data = array(
+        'productName'           => isset($_POST['productName']) ? $_POST['productName'] : '',
+        'categoryId'            => isset($_POST['categorySelect']) ? $_POST['categorySelect'] : '',
+        'productDescription'    => isset($_POST['productDescription']) ? $_POST['productDescription'] : '',
+        'stock'                 => isset($_POST['stock']) ? $_POST['stock'] : '',
+        'onHand'                => isset($_POST['onHand']) ? $_POST['onHand'] : '',
+        'price'                 => isset($_POST['price']) ? $_POST['price'] : '',
+        'supplierId'            => isset($_POST['supplierSelect']) ? $_POST['supplierSelect'] : '',
+        'id'                    => isset($_POST['productId']) ? $_POST['productId'] : '',
+    );
+
+    echo $info->editProduct($data);
+}
+
+if (isset($_POST['getProducts']))
+{
+    echo $info->getProducts();
+}
+
 if (isset($_POST['deleteProduct']))
 {
     $id = isset($_POST['id']) ? $_POST['id'] : '';
 
     echo $info->deleteProduct($id);
+}
+
+if (isset($_POST['addTransaction']))
+{
+    $data = array(
+        'transactionNumber'     => isset($_POST['transactionNumber']) ? $_POST['transactionNumber'] : '',
+        'transactionDate'       => isset($_POST['transactionDate']) ? $_POST['transactionDate'] : '',
+        'customerTransaction'   => isset($_POST['customerTransaction']) ? $_POST['customerTransaction'] : '',
+        'productTransaction'    => isset($_POST['product']) ? $_POST['product'] : '',
+        'quantity'              => isset($_POST['quantity']) ? $_POST['quantity'] : '',
+        'userId'                => $_SESSION['userId'],
+    );
+
+    echo $info->addTransaction($data);
+}
+
+if (isset($_POST['viewTransaction']))
+{
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+    echo $info->transactionModal($id);
 }
