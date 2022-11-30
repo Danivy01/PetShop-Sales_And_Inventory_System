@@ -6,7 +6,6 @@
 </head>
 
 <body class="bg-gradient-primary">
-    <?php print_r($_SESSION); ?>
 
     <?php if (isset($_SESSION['randomId'])) : ?>
 
